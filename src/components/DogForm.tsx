@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -186,7 +185,7 @@ export const DogForm = ({ open, onOpenChange, dog, onSuccess }: DogFormProps) =>
           </DialogTitle>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit} className="space-y-6 sm:space-y-8">
+        <form onSubmit={handleSubmit} className="space-y-6 sm:space-y-8 pb-24">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
             <div>
               <Label htmlFor="name" className="text-base sm:text-lg font-semibold">Imię psiaka 🏷️</Label>
@@ -357,7 +356,7 @@ export const DogForm = ({ open, onOpenChange, dog, onSuccess }: DogFormProps) =>
             />
           )}
 
-          <div className="flex flex-col sm:flex-row gap-4 pt-6">
+          <div className="sticky bottom-0 -mx-4 -mb-4 sm:-mx-6 sm:-mb-6 bg-background border-t p-4 sm:p-6 flex flex-col sm:flex-row gap-4 z-10">
             <Button type="submit" disabled={loading} className="flex-1 h-12 sm:h-14 text-base sm:text-lg font-semibold">
               {loading ? "Zapisywanie... ⏳" : dog ? "💾 Zaktualizuj Psa" : "✨ Dodaj Psa"}
             </Button>
