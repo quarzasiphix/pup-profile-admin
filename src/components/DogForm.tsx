@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -169,7 +170,7 @@ export const DogForm = ({ open, onOpenChange, dog, onSuccess }: DogFormProps) =>
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="fixed inset-0 w-screen h-screen max-w-none max-h-none sm:relative sm:inset-auto sm:w-[95vw] sm:max-w-4xl sm:h-[95vh] sm:max-h-[95vh] overflow-y-auto p-4 sm:p-6 border-0 sm:border rounded-none sm:rounded-lg">
+      <DialogContent className="overflow-y-auto inset-0 w-screen h-screen max-w-none max-h-none translate-x-0 translate-y-0 rounded-none border-0 p-4 sm:inset-auto sm:left-1/2 sm:top-1/2 sm:w-[95vw] sm:max-w-4xl sm:h-[95vh] sm:max-h-[95vh] sm:-translate-x-1/2 sm:-translate-y-1/2 sm:rounded-lg sm:border sm:p-6">
         {/* Sticky Close Button */}
         <button
           onClick={() => onOpenChange(false)}
