@@ -11,8 +11,9 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { ImageUpload } from "@/components/ImageUpload";
 import { ThumbnailSelector } from "@/components/ThumbnailSelector";
-import { Heart, Baby, Calendar, Weight, X } from "lucide-react";
+import { Heart, Baby, X } from "lucide-react";
 import type { Tables } from "@/integrations/supabase/types";
+import { Switch } from "@/components/ui/switch";
 
 type Dog = Tables<"dogs">;
 
@@ -31,8 +32,7 @@ export const DogForm = ({ open, onOpenChange, dog, onSuccess }: DogFormProps) =>
     gender: "",
     short_description: "",
     long_description: "",
-    weight_kg: "",
-    birthday: "",
+    is_reproduktor: false,
   });
   const [images, setImages] = useState<Array<{
     id: string;
@@ -54,8 +54,7 @@ export const DogForm = ({ open, onOpenChange, dog, onSuccess }: DogFormProps) =>
         gender: dog.gender || "",
         short_description: dog.short_description || "",
         long_description: dog.long_description || "",
-        weight_kg: dog.weight_kg?.toString() || "",
-        birthday: dog.birthday || "",
+        is_reproduktor: (dog as any).is_reproduktor ?? false,
       });
       fetchDogImages(dog.id);
     } else {
@@ -66,8 +65,7 @@ export const DogForm = ({ open, onOpenChange, dog, onSuccess }: DogFormProps) =>
         gender: "",
         short_description: "",
         long_description: "",
-        weight_kg: "",
-        birthday: "",
+        is_reproduktor: false,
       });
       setImages([]);
     }
@@ -88,7 +86,7 @@ export const DogForm = ({ open, onOpenChange, dog, onSuccess }: DogFormProps) =>
     }
   };
 
-  const handleInputChange = (field: string, value: string) => {
+  const handleInputChange = (field: string, value: any) => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
@@ -108,15 +106,14 @@ export const DogForm = ({ open, onOpenChange, dog, onSuccess }: DogFormProps) =>
     }
 
     try {
-      const dogData = {
+      const dogData: any = {
         name: formData.name,
         breed: formData.breed as "yorkshire_terrier" | "pomeranian",
         age: formData.age as "puppy" | "adult",
         gender: formData.gender as "male" | "female",
         short_description: formData.short_description || null,
         long_description: formData.long_description || null,
-        weight_kg: formData.weight_kg ? parseFloat(formData.weight_kg) : null,
-        birthday: formData.birthday || null,
+        is_reproduktor: formData.is_reproduktor,
         // Remove thumbnail_url as we now use is_thumbnail in dog_images
         thumbnail_url: null,
         // Set type based on age and gender for backward compatibility
@@ -293,33 +290,15 @@ export const DogForm = ({ open, onOpenChange, dog, onSuccess }: DogFormProps) =>
             </div>
 
             <div>
-              <Label htmlFor="weight" className="text-base sm:text-lg font-semibold flex items-center gap-2">
-                <Weight className="h-4 w-4 sm:h-5 sm:w-5" />
-                Waga (kg)
-              </Label>
-              <Input
-                id="weight"
-                type="number"
-                step="0.1"
-                value={formData.weight_kg}
-                onChange={(e) => handleInputChange("weight_kg", e.target.value)}
-                className="mt-2 text-base sm:text-lg h-10 sm:h-12"
-                placeholder="np. 2.5"
-              />
-            </div>
-
-            <div className="md:col-span-2">
-              <Label htmlFor="birthday" className="text-base sm:text-lg font-semibold flex items-center gap-2">
-                <Calendar className="h-4 w-4 sm:h-5 sm:w-5" />
-                Data urodzenia 🎂
-              </Label>
-              <Input
-                id="birthday"
-                type="date"
-                value={formData.birthday}
-                onChange={(e) => handleInputChange("birthday", e.target.value)}
-                className="mt-2 text-base sm:text-lg h-10 sm:h-12"
-              />
+              <Label className="text-base sm:text-lg font-semibold mb-4 block">Reproduktor? 🐾</Label>
+              <div className="flex items-center gap-4">
+                <Switch
+                  id="is-repro"
+                  checked={formData.is_reproduktor}
+                  onCheckedChange={(val) => handleInputChange("is_reproduktor", val)}
+                />
+                <span className="text-base sm:text-lg">{formData.is_reproduktor ? "Tak" : "Nie"}</span>
+              </div>
             </div>
           </div>
 

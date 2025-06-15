@@ -6,6 +6,7 @@ import { Upload, X, Image } from "lucide-react";
 
 interface ImageUploadProps {
   dogId?: string;
+  puppyId?: string;
   images: Array<{
     id: string;
     image_url: string;
@@ -26,6 +27,7 @@ interface ImageUploadProps {
 
 export const ImageUpload = ({ 
   dogId, 
+  puppyId, 
   images, 
   onImagesChange, 
   maxImages = 5,
@@ -34,6 +36,12 @@ export const ImageUpload = ({
   const [uploading, setUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
+
+  const parentId = dogId || puppyId;
+  const isDog = !!dogId;
+  const tableName = isDog ? "dog_images" : "puppy_images";
+  const foreignKey = isDog ? "dog_id" : "puppy_id";
+  const bucketFolder = isDog ? "dog-images" : "puppy-images";
 
   // Notify parent whenever uploading state changes
   useEffect(() => {
@@ -93,7 +101,7 @@ export const ImageUpload = ({
     const optimizedFile = await optimizeImage(file);
     const fileExt = 'jpg';
     const fileName = `${Math.random()}.${fileExt}`;
-    const filePath = `dog-images/${fileName}`;
+    const filePath = `${bucketFolder}/${fileName}`;
 
     const { error: uploadError } = await supabase.storage
       .from('dog-images')
@@ -130,18 +138,19 @@ export const ImageUpload = ({
       for (const file of files) {
         const imageUrl = await uploadImage(file);
         
-        if (dogId) {
+        if (parentId) {
           // Save to database if dog exists
-          const { data: imageData, error } = await supabase
-            .from("dog_images")
-            .insert({
-              dog_id: dogId,
-              image_url: imageUrl,
-              image_name: file.name,
-              original_name: file.name,
-              file_size: file.size,
-              is_thumbnail: images.length === 0 && newImages.length === 0, // First image becomes thumbnail
-            })
+          const payload: any = {
+            [foreignKey]: parentId,
+            image_url: imageUrl,
+            image_name: file.name,
+            original_name: file.name,
+            file_size: file.size,
+            is_thumbnail: images.length === 0 && newImages.length === 0,
+          };
+          const { data: imageData, error } = await (supabase as any)
+            .from(tableName)
+            .insert(payload)
             .select()
             .single();
 
@@ -183,9 +192,9 @@ export const ImageUpload = ({
 
   const removeImage = async (imageId: string, imageUrl: string) => {
     try {
-      if (dogId && !imageId.startsWith('temp-')) {
-        const { error } = await supabase
-          .from("dog_images")
+      if (parentId && !imageId.startsWith('temp-')) {
+        const { error } = await (supabase as any)
+          .from(tableName)
           .delete()
           .eq("id", imageId);
 
@@ -197,7 +206,7 @@ export const ImageUpload = ({
       const fileName = urlParts[urlParts.length - 1];
       await supabase.storage
         .from('dog-images')
-        .remove([`dog-images/${fileName}`]);
+        .remove([`${bucketFolder}/${fileName}`]);
 
       onImagesChange(images.filter(img => img.id !== imageId));
       
