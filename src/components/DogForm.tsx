@@ -170,7 +170,7 @@ export const DogForm = ({ open, onOpenChange, dog, onSuccess }: DogFormProps) =>
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="w-[95vw] max-w-4xl h-[95vh] max-h-[95vh] overflow-y-auto relative p-4 sm:p-6">
+      <DialogContent className="w-[100vw] sm:w-[95vw] max-w-4xl h-[100vh] sm:h-[95vh] max-h-[100vh] sm:max-h-[95vh] overflow-y-auto relative p-4 sm:p-6 m-0 sm:m-4 rounded-none sm:rounded-lg top-0 left-0 translate-x-0 translate-y-0 sm:top-[50%] sm:left-[50%] sm:translate-x-[-50%] sm:translate-y-[-50%]">
         {/* Sticky Close Button */}
         <button
           onClick={() => onOpenChange(false)}
