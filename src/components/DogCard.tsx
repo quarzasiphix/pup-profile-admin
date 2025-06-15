@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Edit, Trash2, Calendar, Weight } from "lucide-react";
+import { ImageGallery } from "@/components/ImageGallery";
 import type { Tables } from "@/integrations/supabase/types";
 
 type Dog = Tables<"dogs">;
@@ -59,15 +60,7 @@ export const DogCard = ({ dog, onEdit, onDelete }: DogCardProps) => {
       </CardHeader>
       
       <CardContent className="space-y-3">
-        {dog.thumbnail_url && (
-          <div className="aspect-video rounded-md overflow-hidden bg-gray-100">
-            <img
-              src={dog.thumbnail_url}
-              alt={dog.name}
-              className="w-full h-full object-cover"
-            />
-          </div>
-        )}
+        <ImageGallery dogId={dog.id} thumbnailUrl={dog.thumbnail_url} />
         
         {dog.short_description && (
           <p className="text-gray-600 text-sm line-clamp-2 text-center md:text-left">

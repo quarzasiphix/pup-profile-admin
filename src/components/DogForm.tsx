@@ -8,7 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import { Upload, X } from "lucide-react";
+import { ImageUpload } from "@/components/ImageUpload";
 import type { Tables } from "@/integrations/supabase/types";
 
 type Dog = Tables<"dogs">;
@@ -29,7 +29,12 @@ export const DogForm = ({ open, onOpenChange, dog, onSuccess }: DogFormProps) =>
     weight_kg: "",
     birthday: "",
   });
-  const [thumbnailFile, setThumbnailFile] = useState<File | null>(null);
+  const [images, setImages] = useState<Array<{
+    id: string;
+    image_url: string;
+    image_name: string | null;
+    sort_order: number | null;
+  }>>([]);
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
 
@@ -43,6 +48,7 @@ export const DogForm = ({ open, onOpenChange, dog, onSuccess }: DogFormProps) =>
         weight_kg: dog.weight_kg?.toString() || "",
         birthday: dog.birthday || "",
       });
+      fetchDogImages(dog.id);
     } else {
       setFormData({
         name: "",
@@ -52,37 +58,27 @@ export const DogForm = ({ open, onOpenChange, dog, onSuccess }: DogFormProps) =>
         weight_kg: "",
         birthday: "",
       });
+      setImages([]);
     }
-    setThumbnailFile(null);
   }, [dog, open]);
+
+  const fetchDogImages = async (dogId: string) => {
+    try {
+      const { data, error } = await supabase
+        .from("dog_images")
+        .select("*")
+        .eq("dog_id", dogId)
+        .order("sort_order", { ascending: true });
+
+      if (error) throw error;
+      setImages(data || []);
+    } catch (error) {
+      console.error("Error fetching dog images:", error);
+    }
+  };
 
   const handleInputChange = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
-  };
-
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      setThumbnailFile(file);
-    }
-  };
-
-  const uploadThumbnail = async (file: File): Promise<string> => {
-    const fileExt = file.name.split('.').pop();
-    const fileName = `${Math.random()}.${fileExt}`;
-    const filePath = `thumbnails/${fileName}`;
-
-    const { error: uploadError } = await supabase.storage
-      .from('dog-images')
-      .upload(filePath, file);
-
-    if (uploadError) throw uploadError;
-
-    const { data } = supabase.storage
-      .from('dog-images')
-      .getPublicUrl(filePath);
-
-    return data.publicUrl;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -90,11 +86,8 @@ export const DogForm = ({ open, onOpenChange, dog, onSuccess }: DogFormProps) =>
     setLoading(true);
 
     try {
-      let thumbnailUrl = dog?.thumbnail_url || null;
-
-      if (thumbnailFile) {
-        thumbnailUrl = await uploadThumbnail(thumbnailFile);
-      }
+      // Set thumbnail URL to first image if available
+      const thumbnailUrl = images.length > 0 ? images[0].image_url : null;
 
       const dogData = {
         name: formData.name,
@@ -106,17 +99,42 @@ export const DogForm = ({ open, onOpenChange, dog, onSuccess }: DogFormProps) =>
         thumbnail_url: thumbnailUrl,
       };
 
+      let dogId: string;
+
       if (dog) {
+        // Update existing dog
         const { error } = await supabase
           .from("dogs")
           .update(dogData)
           .eq("id", dog.id);
         if (error) throw error;
+        dogId = dog.id;
       } else {
-        const { error } = await supabase
+        // Create new dog
+        const { data: newDog, error } = await supabase
           .from("dogs")
-          .insert([dogData]);
+          .insert([dogData])
+          .select()
+          .single();
         if (error) throw error;
+        dogId = newDog.id;
+
+        // Save temporary images to database
+        if (images.length > 0) {
+          const imageInserts = images.map((img, index) => ({
+            dog_id: dogId,
+            image_url: img.image_url,
+            image_name: img.image_name,
+            original_name: img.image_name,
+            sort_order: index,
+          }));
+
+          const { error: imageError } = await supabase
+            .from("dog_images")
+            .insert(imageInserts);
+          
+          if (imageError) throw imageError;
+        }
       }
 
       toast({
@@ -137,12 +155,12 @@ export const DogForm = ({ open, onOpenChange, dog, onSuccess }: DogFormProps) =>
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>{dog ? "Edytuj Psa" : "Dodaj Nowego Psa"}</DialogTitle>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <Label htmlFor="name">Imię *</Label>
@@ -191,28 +209,6 @@ export const DogForm = ({ open, onOpenChange, dog, onSuccess }: DogFormProps) =>
           </div>
 
           <div>
-            <Label htmlFor="thumbnail">Zdjęcie miniaturowe</Label>
-            <div className="mt-1">
-              <input
-                id="thumbnail"
-                type="file"
-                accept="image/*"
-                onChange={handleFileChange}
-                className="hidden"
-              />
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => document.getElementById("thumbnail")?.click()}
-                className="w-full"
-              >
-                <Upload className="h-4 w-4 mr-2" />
-                {thumbnailFile ? thumbnailFile.name : "Wybierz zdjęcie miniaturowe"}
-              </Button>
-            </div>
-          </div>
-
-          <div>
             <Label htmlFor="short_description">Krótki opis</Label>
             <Textarea
               id="short_description"
@@ -231,6 +227,13 @@ export const DogForm = ({ open, onOpenChange, dog, onSuccess }: DogFormProps) =>
               rows={4}
             />
           </div>
+
+          <ImageUpload
+            dogId={dog?.id}
+            images={images}
+            onImagesChange={setImages}
+            maxImages={5}
+          />
 
           <div className="flex gap-2 pt-4">
             <Button type="submit" disabled={loading} className="flex-1">

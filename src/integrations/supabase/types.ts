@@ -13,28 +13,34 @@ export type Database = {
         Row: {
           created_at: string
           dog_id: string
+          file_size: number | null
           id: string
           image_name: string | null
           image_url: string
           is_thumbnail: boolean
+          original_name: string | null
           sort_order: number | null
         }
         Insert: {
           created_at?: string
           dog_id: string
+          file_size?: number | null
           id?: string
           image_name?: string | null
           image_url: string
           is_thumbnail?: boolean
+          original_name?: string | null
           sort_order?: number | null
         }
         Update: {
           created_at?: string
           dog_id?: string
+          file_size?: number | null
           id?: string
           image_name?: string | null
           image_url?: string
           is_thumbnail?: boolean
+          original_name?: string | null
           sort_order?: number | null
         }
         Relationships: [
