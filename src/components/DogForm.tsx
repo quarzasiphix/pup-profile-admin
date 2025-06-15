@@ -120,14 +120,14 @@ export const DogForm = ({ open, onOpenChange, dog, onSuccess }: DogFormProps) =>
       }
 
       toast({
-        title: "Success",
-        description: `Dog ${dog ? "updated" : "added"} successfully`,
+        title: "Sukces",
+        description: `Pies ${dog ? "zaktualizowany" : "dodany"} pomyślnie`,
       });
       onSuccess();
     } catch (error) {
       toast({
-        title: "Error",
-        description: `Failed to ${dog ? "update" : "add"} dog`,
+        title: "Błąd",
+        description: `Nie udało się ${dog ? "zaktualizować" : "dodać"} psa`,
         variant: "destructive",
       });
     } finally {
@@ -139,13 +139,13 @@ export const DogForm = ({ open, onOpenChange, dog, onSuccess }: DogFormProps) =>
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>{dog ? "Edit Dog" : "Add New Dog"}</DialogTitle>
+          <DialogTitle>{dog ? "Edytuj Psa" : "Dodaj Nowego Psa"}</DialogTitle>
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <Label htmlFor="name">Name *</Label>
+              <Label htmlFor="name">Imię *</Label>
               <Input
                 id="name"
                 value={formData.name}
@@ -155,21 +155,21 @@ export const DogForm = ({ open, onOpenChange, dog, onSuccess }: DogFormProps) =>
             </div>
 
             <div>
-              <Label htmlFor="type">Type *</Label>
+              <Label htmlFor="type">Typ *</Label>
               <Select value={formData.type} onValueChange={(value) => handleInputChange("type", value)}>
                 <SelectTrigger>
-                  <SelectValue placeholder="Select dog type" />
+                  <SelectValue placeholder="Wybierz typ psa" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="puppy">Puppy</SelectItem>
-                  <SelectItem value="adult_male">Adult Male</SelectItem>
-                  <SelectItem value="adult_female">Adult Female</SelectItem>
+                  <SelectItem value="puppy">Szczenię</SelectItem>
+                  <SelectItem value="adult_male">Dorosły Samiec</SelectItem>
+                  <SelectItem value="adult_female">Dorosła Samica</SelectItem>
                 </SelectContent>
               </Select>
             </div>
 
             <div>
-              <Label htmlFor="weight">Weight (kg)</Label>
+              <Label htmlFor="weight">Waga (kg)</Label>
               <Input
                 id="weight"
                 type="number"
@@ -180,7 +180,7 @@ export const DogForm = ({ open, onOpenChange, dog, onSuccess }: DogFormProps) =>
             </div>
 
             <div>
-              <Label htmlFor="birthday">Birthday</Label>
+              <Label htmlFor="birthday">Data urodzenia</Label>
               <Input
                 id="birthday"
                 type="date"
@@ -191,7 +191,7 @@ export const DogForm = ({ open, onOpenChange, dog, onSuccess }: DogFormProps) =>
           </div>
 
           <div>
-            <Label htmlFor="thumbnail">Thumbnail Image</Label>
+            <Label htmlFor="thumbnail">Zdjęcie miniaturowe</Label>
             <div className="mt-1">
               <input
                 id="thumbnail"
@@ -207,13 +207,13 @@ export const DogForm = ({ open, onOpenChange, dog, onSuccess }: DogFormProps) =>
                 className="w-full"
               >
                 <Upload className="h-4 w-4 mr-2" />
-                {thumbnailFile ? thumbnailFile.name : "Choose thumbnail image"}
+                {thumbnailFile ? thumbnailFile.name : "Wybierz zdjęcie miniaturowe"}
               </Button>
             </div>
           </div>
 
           <div>
-            <Label htmlFor="short_description">Short Description</Label>
+            <Label htmlFor="short_description">Krótki opis</Label>
             <Textarea
               id="short_description"
               value={formData.short_description}
@@ -223,7 +223,7 @@ export const DogForm = ({ open, onOpenChange, dog, onSuccess }: DogFormProps) =>
           </div>
 
           <div>
-            <Label htmlFor="long_description">Long Description</Label>
+            <Label htmlFor="long_description">Długi opis</Label>
             <Textarea
               id="long_description"
               value={formData.long_description}
@@ -234,10 +234,10 @@ export const DogForm = ({ open, onOpenChange, dog, onSuccess }: DogFormProps) =>
 
           <div className="flex gap-2 pt-4">
             <Button type="submit" disabled={loading} className="flex-1">
-              {loading ? "Saving..." : dog ? "Update Dog" : "Add Dog"}
+              {loading ? "Zapisywanie..." : dog ? "Zaktualizuj Psa" : "Dodaj Psa"}
             </Button>
             <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
-              Cancel
+              Anuluj
             </Button>
           </div>
         </form>

@@ -32,12 +32,12 @@ export const AuthDialog = ({ open, onOpenChange }: AuthDialogProps) => {
       if (error) throw error;
 
       toast({
-        title: "Success",
-        description: "Please check your email to confirm your account",
+        title: "Sukces",
+        description: "Sprawdź swój email, aby potwierdzić konto",
       });
     } catch (error: any) {
       toast({
-        title: "Error",
+        title: "Błąd",
         description: error.message,
         variant: "destructive",
       });
@@ -60,12 +60,12 @@ export const AuthDialog = ({ open, onOpenChange }: AuthDialogProps) => {
 
       onOpenChange(false);
       toast({
-        title: "Success",
-        description: "Signed in successfully",
+        title: "Sukces",
+        description: "Zalogowano pomyślnie",
       });
     } catch (error: any) {
       toast({
-        title: "Error",
+        title: "Błąd",
         description: error.message,
         variant: "destructive",
       });
@@ -78,13 +78,13 @@ export const AuthDialog = ({ open, onOpenChange }: AuthDialogProps) => {
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Access Dog Breeding CMS</DialogTitle>
+          <DialogTitle>Dostęp do Systemu Zarządzania Hodowlą Psów</DialogTitle>
         </DialogHeader>
 
         <Tabs defaultValue="signin" className="w-full">
           <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="signin">Sign In</TabsTrigger>
-            <TabsTrigger value="signup">Sign Up</TabsTrigger>
+            <TabsTrigger value="signin">Zaloguj się</TabsTrigger>
+            <TabsTrigger value="signup">Zarejestruj się</TabsTrigger>
           </TabsList>
 
           <TabsContent value="signin">
@@ -100,7 +100,7 @@ export const AuthDialog = ({ open, onOpenChange }: AuthDialogProps) => {
                 />
               </div>
               <div>
-                <Label htmlFor="signin-password">Password</Label>
+                <Label htmlFor="signin-password">Hasło</Label>
                 <Input
                   id="signin-password"
                   type="password"
@@ -110,7 +110,7 @@ export const AuthDialog = ({ open, onOpenChange }: AuthDialogProps) => {
                 />
               </div>
               <Button type="submit" className="w-full" disabled={loading}>
-                {loading ? "Signing in..." : "Sign In"}
+                {loading ? "Logowanie..." : "Zaloguj się"}
               </Button>
             </form>
           </TabsContent>
@@ -128,7 +128,7 @@ export const AuthDialog = ({ open, onOpenChange }: AuthDialogProps) => {
                 />
               </div>
               <div>
-                <Label htmlFor="signup-password">Password</Label>
+                <Label htmlFor="signup-password">Hasło</Label>
                 <Input
                   id="signup-password"
                   type="password"
@@ -139,7 +139,7 @@ export const AuthDialog = ({ open, onOpenChange }: AuthDialogProps) => {
                 />
               </div>
               <Button type="submit" className="w-full" disabled={loading}>
-                {loading ? "Creating account..." : "Sign Up"}
+                {loading ? "Tworzenie konta..." : "Zarejestruj się"}
               </Button>
             </form>
           </TabsContent>

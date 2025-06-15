@@ -69,14 +69,14 @@ const Index = () => {
       if (error) throw error;
 
       toast({
-        title: "Success",
-        description: "Dog removed successfully",
+        title: "Sukces",
+        description: "Pies został usunięty pomyślnie",
       });
       refetch();
     } catch (error) {
       toast({
-        title: "Error",
-        description: "Failed to remove dog",
+        title: "Błąd",
+        description: "Nie udało się usunąć psa",
         variant: "destructive",
       });
     }
@@ -97,12 +97,12 @@ const Index = () => {
       <div className="container mx-auto px-4 py-8">
         <div className="flex justify-between items-center mb-8">
           <div>
-            <h1 className="text-4xl font-bold text-gray-900">Dog Breeding CMS</h1>
-            <p className="text-gray-600 mt-2">Manage your breeding dogs and their information</p>
+            <h1 className="text-4xl font-bold text-gray-900">System Zarządzania Hodowlą Psów</h1>
+            <p className="text-gray-600 mt-2">Zarządzaj swoimi psami hodowlanymi i ich informacjami</p>
           </div>
           <Button onClick={handleAddDog} className="flex items-center gap-2">
             <Plus className="h-4 w-4" />
-            Add New Dog
+            Dodaj Nowego Psa
           </Button>
         </div>
 
@@ -114,9 +114,9 @@ const Index = () => {
           </div>
         ) : dogs.length === 0 ? (
           <div className="text-center py-12">
-            <h3 className="text-xl font-medium text-gray-900 mb-2">No dogs added yet</h3>
-            <p className="text-gray-600 mb-4">Start by adding your first dog to the system</p>
-            <Button onClick={handleAddDog}>Add Your First Dog</Button>
+            <h3 className="text-xl font-medium text-gray-900 mb-2">Nie dodano jeszcze żadnych psów</h3>
+            <p className="text-gray-600 mb-4">Zacznij od dodania swojego pierwszego psa do systemu</p>
+            <Button onClick={handleAddDog}>Dodaj Swojego Pierwszego Psa</Button>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

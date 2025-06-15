@@ -17,19 +17,19 @@ export const DogCard = ({ dog, onEdit, onDelete }: DogCardProps) => {
   const formatDogType = (type: string) => {
     switch (type) {
       case "puppy":
-        return "Puppy";
+        return "Szczenię";
       case "adult_male":
-        return "Adult Male";
+        return "Dorosły Samiec";
       case "adult_female":
-        return "Adult Female";
+        return "Dorosła Samica";
       default:
         return type;
     }
   };
 
   const formatDate = (date: string | null) => {
-    if (!date) return "Unknown";
-    return new Date(date).toLocaleDateString();
+    if (!date) return "Nieznana";
+    return new Date(date).toLocaleDateString("pl-PL");
   };
 
   const getTypeColor = (type: string) => {
@@ -97,7 +97,7 @@ export const DogCard = ({ dog, onEdit, onDelete }: DogCardProps) => {
           className="flex-1"
         >
           <Edit className="h-3 w-3 mr-1" />
-          Edit
+          Edytuj
         </Button>
         <Button
           variant="outline"
@@ -106,7 +106,7 @@ export const DogCard = ({ dog, onEdit, onDelete }: DogCardProps) => {
           className="flex-1 text-red-600 hover:text-red-700"
         >
           <Trash2 className="h-3 w-3 mr-1" />
-          Remove
+          Usuń
         </Button>
       </CardFooter>
     </Card>
