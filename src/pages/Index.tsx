@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -93,7 +92,7 @@ const Index = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 pb-24">
       <div className="container mx-auto px-4 py-6 max-w-6xl">
         {/* Header Section */}
         <div className="text-center mb-8">
@@ -103,16 +102,6 @@ const Index = () => {
           <p className="text-lg md:text-xl text-gray-600 mb-6 max-w-2xl mx-auto leading-relaxed">
             Zarządzaj swoimi ukochanymi psami hodowlanymi w jednym miejscu
           </p>
-          
-          {/* Large Add Button */}
-          <Button 
-            onClick={handleAddDog} 
-            size="lg"
-            className="bg-green-600 hover:bg-green-700 text-white px-8 py-4 text-lg md:text-xl font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105"
-          >
-            <Plus className="h-6 w-6 mr-3" />
-            Dodaj Nowego Psa
-          </Button>
         </div>
 
         {/* Content Area */}
@@ -165,19 +154,6 @@ const Index = () => {
                 />
               ))}
             </div>
-
-            {/* Bottom Add Button for easier access */}
-            <div className="text-center mt-12">
-              <Button 
-                onClick={handleAddDog} 
-                size="lg"
-                variant="outline"
-                className="border-2 border-green-600 text-green-600 hover:bg-green-600 hover:text-white px-8 py-4 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-200"
-              >
-                <Plus className="h-5 w-5 mr-3" />
-                Dodaj Kolejnego Psa
-              </Button>
-            </div>
           </>
         )}
 
@@ -187,6 +163,18 @@ const Index = () => {
           dog={editingDog}
           onSuccess={handleFormSuccess}
         />
+      </div>
+
+      {/* Sticky Add Button at Bottom */}
+      <div className="fixed bottom-6 left-1/2 transform -translate-x-1/2 z-40">
+        <Button 
+          onClick={handleAddDog} 
+          size="lg"
+          className="bg-green-600 hover:bg-green-700 text-white px-8 py-4 text-lg md:text-xl font-semibold rounded-full shadow-2xl hover:shadow-3xl transition-all duration-200 transform hover:scale-105 border-4 border-white"
+        >
+          <Plus className="h-6 w-6 mr-3" />
+          Dodaj Nowego Psa
+        </Button>
       </div>
     </div>
   );
