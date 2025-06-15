@@ -94,32 +94,47 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="container mx-auto px-4 py-8">
-        <div className="flex justify-between items-center mb-8">
-          <div>
-            <h1 className="text-4xl font-bold text-gray-900">System Zarządzania Hodowlą Psów</h1>
-            <p className="text-gray-600 mt-2">Zarządzaj swoimi psami hodowlanymi i ich informacjami</p>
+      <div className="container mx-auto px-4 py-6">
+        <div className="mb-6">
+          <div className="text-center md:text-left mb-4">
+            <h1 className="text-2xl md:text-4xl font-bold text-gray-900 mb-2">
+              System Zarządzania Hodowlą Psów
+            </h1>
+            <p className="text-sm md:text-base text-gray-600">
+              Zarządzaj swoimi psami hodowlanymi i ich informacjami
+            </p>
           </div>
-          <Button onClick={handleAddDog} className="flex items-center gap-2">
-            <Plus className="h-4 w-4" />
-            Dodaj Nowego Psa
-          </Button>
+          <div className="flex justify-center md:justify-end">
+            <Button 
+              onClick={handleAddDog} 
+              className="w-full md:w-auto flex items-center justify-center gap-2 px-6 py-3"
+            >
+              <Plus className="h-4 w-4" />
+              <span className="text-sm md:text-base">Dodaj Nowego Psa</span>
+            </Button>
+          </div>
         </div>
 
         {isLoading ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
             {[...Array(6)].map((_, i) => (
-              <div key={i} className="bg-white rounded-lg shadow-md h-96 animate-pulse" />
+              <div key={i} className="bg-white rounded-lg shadow-md h-80 md:h-96 animate-pulse" />
             ))}
           </div>
         ) : dogs.length === 0 ? (
-          <div className="text-center py-12">
-            <h3 className="text-xl font-medium text-gray-900 mb-2">Nie dodano jeszcze żadnych psów</h3>
-            <p className="text-gray-600 mb-4">Zacznij od dodania swojego pierwszego psa do systemu</p>
-            <Button onClick={handleAddDog}>Dodaj Swojego Pierwszego Psa</Button>
+          <div className="text-center py-12 px-4">
+            <h3 className="text-lg md:text-xl font-medium text-gray-900 mb-2">
+              Nie dodano jeszcze żadnych psów
+            </h3>
+            <p className="text-sm md:text-base text-gray-600 mb-4">
+              Zacznij od dodania swojego pierwszego psa do systemu
+            </p>
+            <Button onClick={handleAddDog} className="w-full md:w-auto">
+              Dodaj Swojego Pierwszego Psa
+            </Button>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
             {dogs.map((dog) => (
               <DogCard
                 key={dog.id}

@@ -48,9 +48,11 @@ export const DogCard = ({ dog, onEdit, onDelete }: DogCardProps) => {
   return (
     <Card className="hover:shadow-lg transition-shadow">
       <CardHeader className="pb-3">
-        <div className="flex justify-between items-start">
-          <CardTitle className="text-xl">{dog.name}</CardTitle>
-          <Badge className={getTypeColor(dog.type)}>
+        <div className="flex flex-col space-y-2 md:flex-row md:justify-between md:items-start md:space-y-0">
+          <CardTitle className="text-lg md:text-xl text-center md:text-left">
+            {dog.name}
+          </CardTitle>
+          <Badge className={`${getTypeColor(dog.type)} text-xs self-center md:self-start`}>
             {formatDogType(dog.type)}
           </Badge>
         </div>
@@ -68,33 +70,33 @@ export const DogCard = ({ dog, onEdit, onDelete }: DogCardProps) => {
         )}
         
         {dog.short_description && (
-          <p className="text-gray-600 text-sm line-clamp-2">
+          <p className="text-gray-600 text-sm line-clamp-2 text-center md:text-left">
             {dog.short_description}
           </p>
         )}
         
-        <div className="flex flex-wrap gap-2 text-sm text-gray-500">
+        <div className="flex flex-col space-y-1 md:flex-row md:flex-wrap md:gap-2 md:space-y-0 text-sm text-gray-500">
           {dog.birthday && (
-            <div className="flex items-center gap-1">
+            <div className="flex items-center justify-center md:justify-start gap-1">
               <Calendar className="h-3 w-3" />
-              {formatDate(dog.birthday)}
+              <span className="text-xs md:text-sm">{formatDate(dog.birthday)}</span>
             </div>
           )}
           {dog.weight_kg && (
-            <div className="flex items-center gap-1">
+            <div className="flex items-center justify-center md:justify-start gap-1">
               <Weight className="h-3 w-3" />
-              {dog.weight_kg} kg
+              <span className="text-xs md:text-sm">{dog.weight_kg} kg</span>
             </div>
           )}
         </div>
       </CardContent>
       
-      <CardFooter className="flex gap-2 pt-3">
+      <CardFooter className="flex flex-col space-y-2 md:flex-row md:gap-2 md:space-y-0 pt-3">
         <Button
           variant="outline"
           size="sm"
           onClick={() => onEdit(dog)}
-          className="flex-1"
+          className="w-full md:flex-1 text-sm"
         >
           <Edit className="h-3 w-3 mr-1" />
           Edytuj
@@ -103,7 +105,7 @@ export const DogCard = ({ dog, onEdit, onDelete }: DogCardProps) => {
           variant="outline"
           size="sm"
           onClick={() => onDelete(dog.id)}
-          className="flex-1 text-red-600 hover:text-red-700"
+          className="w-full md:flex-1 text-red-600 hover:text-red-700 text-sm"
         >
           <Trash2 className="h-3 w-3 mr-1" />
           Usuń
