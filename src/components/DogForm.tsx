@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -169,7 +170,7 @@ export const DogForm = ({ open, onOpenChange, dog, onSuccess }: DogFormProps) =>
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto relative">
+      <DialogContent className="w-[95vw] max-w-4xl h-[95vh] max-h-[95vh] overflow-y-auto relative p-4 sm:p-6">
         {/* Sticky Close Button */}
         <button
           onClick={() => onOpenChange(false)}
@@ -180,27 +181,27 @@ export const DogForm = ({ open, onOpenChange, dog, onSuccess }: DogFormProps) =>
         </button>
 
         <DialogHeader>
-          <DialogTitle className="text-2xl font-bold text-center pr-12">
+          <DialogTitle className="text-xl sm:text-2xl font-bold text-center pr-12">
             {dog ? "🐕 Edytuj Psa" : "🐶 Dodaj Nowego Psa"}
           </DialogTitle>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit} className="space-y-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <form onSubmit={handleSubmit} className="space-y-6 sm:space-y-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
             <div>
-              <Label htmlFor="name" className="text-lg font-semibold">Imię psiaka 🏷️</Label>
+              <Label htmlFor="name" className="text-base sm:text-lg font-semibold">Imię psiaka 🏷️</Label>
               <Input
                 id="name"
                 value={formData.name}
                 onChange={(e) => handleInputChange("name", e.target.value)}
                 required
-                className="mt-2 text-lg h-12"
+                className="mt-2 text-base sm:text-lg h-10 sm:h-12"
                 placeholder="Podaj imię..."
               />
             </div>
 
             <div className="md:col-span-2">
-              <Label className="text-lg font-semibold mb-4 block">Rasa 🐕</Label>
+              <Label className="text-base sm:text-lg font-semibold mb-4 block">Rasa 🐕</Label>
               <ToggleGroup 
                 type="single" 
                 value={formData.breed} 
@@ -209,19 +210,19 @@ export const DogForm = ({ open, onOpenChange, dog, onSuccess }: DogFormProps) =>
               >
                 <ToggleGroupItem 
                   value="yorkshire_terrier" 
-                  className="h-16 text-lg font-semibold data-[state=on]:bg-amber-100 data-[state=on]:text-amber-800 data-[state=on]:border-amber-300 border-2"
+                  className="h-12 sm:h-16 text-base sm:text-lg font-semibold data-[state=on]:bg-amber-100 data-[state=on]:text-amber-800 data-[state=on]:border-amber-300 border-2"
                 >
                   <div className="flex items-center gap-3">
-                    <span className="text-2xl">🐕</span>
+                    <span className="text-xl sm:text-2xl">🐕</span>
                     <span>Yorkshire Terrier</span>
                   </div>
                 </ToggleGroupItem>
                 <ToggleGroupItem 
                   value="pomeranian"
-                  className="h-16 text-lg font-semibold data-[state=on]:bg-orange-100 data-[state=on]:text-orange-800 data-[state=on]:border-orange-300 border-2"
+                  className="h-12 sm:h-16 text-base sm:text-lg font-semibold data-[state=on]:bg-orange-100 data-[state=on]:text-orange-800 data-[state=on]:border-orange-300 border-2"
                 >
                   <div className="flex items-center gap-3">
-                    <span className="text-2xl">🦮</span>
+                    <span className="text-xl sm:text-2xl">🦮</span>
                     <span>Pomeranian</span>
                   </div>
                 </ToggleGroupItem>
@@ -229,60 +230,60 @@ export const DogForm = ({ open, onOpenChange, dog, onSuccess }: DogFormProps) =>
             </div>
 
             <div>
-              <Label className="text-lg font-semibold mb-4 block">Wiek 📅</Label>
+              <Label className="text-base sm:text-lg font-semibold mb-4 block">Wiek 📅</Label>
               <RadioGroup 
                 value={formData.age} 
                 onValueChange={(value) => handleInputChange("age", value)}
                 className="space-y-3"
               >
-                <div className="flex items-center space-x-3 p-4 rounded-lg border-2 hover:bg-blue-50 has-[:checked]:bg-blue-100 has-[:checked]:border-blue-300">
+                <div className="flex items-center space-x-3 p-3 sm:p-4 rounded-lg border-2 hover:bg-blue-50 has-[:checked]:bg-blue-100 has-[:checked]:border-blue-300">
                   <RadioGroupItem value="puppy" id="puppy" className="w-5 h-5" />
-                  <Label htmlFor="puppy" className="flex items-center gap-2 text-lg font-medium cursor-pointer flex-1">
-                    <Baby className="h-5 w-5 text-blue-600" />
+                  <Label htmlFor="puppy" className="flex items-center gap-2 text-base sm:text-lg font-medium cursor-pointer flex-1">
+                    <Baby className="h-4 w-4 sm:h-5 sm:w-5 text-blue-600" />
                     Szczenię
-                    <Badge className="bg-blue-100 text-blue-800 ml-auto">Młode</Badge>
+                    <Badge className="bg-blue-100 text-blue-800 ml-auto text-xs">Młode</Badge>
                   </Label>
                 </div>
-                <div className="flex items-center space-x-3 p-4 rounded-lg border-2 hover:bg-green-50 has-[:checked]:bg-green-100 has-[:checked]:border-green-300">
+                <div className="flex items-center space-x-3 p-3 sm:p-4 rounded-lg border-2 hover:bg-green-50 has-[:checked]:bg-green-100 has-[:checked]:border-green-300">
                   <RadioGroupItem value="adult" id="adult" className="w-5 h-5" />
-                  <Label htmlFor="adult" className="flex items-center gap-2 text-lg font-medium cursor-pointer flex-1">
-                    <Heart className="h-5 w-5 text-green-600" />
+                  <Label htmlFor="adult" className="flex items-center gap-2 text-base sm:text-lg font-medium cursor-pointer flex-1">
+                    <Heart className="h-4 w-4 sm:h-5 sm:w-5 text-green-600" />
                     Dorosły
-                    <Badge className="bg-green-100 text-green-800 ml-auto">Dojrzały</Badge>
+                    <Badge className="bg-green-100 text-green-800 ml-auto text-xs">Dojrzały</Badge>
                   </Label>
                 </div>
               </RadioGroup>
             </div>
 
             <div>
-              <Label className="text-lg font-semibold mb-4 block">Płeć 🚻</Label>
+              <Label className="text-base sm:text-lg font-semibold mb-4 block">Płeć 🚻</Label>
               <RadioGroup 
                 value={formData.gender} 
                 onValueChange={(value) => handleInputChange("gender", value)}
                 className="space-y-3"
               >
-                <div className="flex items-center space-x-3 p-4 rounded-lg border-2 hover:bg-indigo-50 has-[:checked]:bg-indigo-100 has-[:checked]:border-indigo-300">
+                <div className="flex items-center space-x-3 p-3 sm:p-4 rounded-lg border-2 hover:bg-indigo-50 has-[:checked]:bg-indigo-100 has-[:checked]:border-indigo-300">
                   <RadioGroupItem value="male" id="male" className="w-5 h-5" />
-                  <Label htmlFor="male" className="flex items-center gap-2 text-lg font-medium cursor-pointer flex-1">
-                    <span className="text-2xl">♂️</span>
+                  <Label htmlFor="male" className="flex items-center gap-2 text-base sm:text-lg font-medium cursor-pointer flex-1">
+                    <span className="text-xl sm:text-2xl">♂️</span>
                     Samiec
-                    <Badge className="bg-indigo-100 text-indigo-800 ml-auto">Chłopiec</Badge>
+                    <Badge className="bg-indigo-100 text-indigo-800 ml-auto text-xs">Chłopiec</Badge>
                   </Label>
                 </div>
-                <div className="flex items-center space-x-3 p-4 rounded-lg border-2 hover:bg-pink-50 has-[:checked]:bg-pink-100 has-[:checked]:border-pink-300">
+                <div className="flex items-center space-x-3 p-3 sm:p-4 rounded-lg border-2 hover:bg-pink-50 has-[:checked]:bg-pink-100 has-[:checked]:border-pink-300">
                   <RadioGroupItem value="female" id="female" className="w-5 h-5" />
-                  <Label htmlFor="female" className="flex items-center gap-2 text-lg font-medium cursor-pointer flex-1">
-                    <span className="text-2xl">♀️</span>
+                  <Label htmlFor="female" className="flex items-center gap-2 text-base sm:text-lg font-medium cursor-pointer flex-1">
+                    <span className="text-xl sm:text-2xl">♀️</span>
                     Samica
-                    <Badge className="bg-pink-100 text-pink-800 ml-auto">Dziewczynka</Badge>
+                    <Badge className="bg-pink-100 text-pink-800 ml-auto text-xs">Dziewczynka</Badge>
                   </Label>
                 </div>
               </RadioGroup>
             </div>
 
             <div>
-              <Label htmlFor="weight" className="text-lg font-semibold flex items-center gap-2">
-                <Weight className="h-5 w-5" />
+              <Label htmlFor="weight" className="text-base sm:text-lg font-semibold flex items-center gap-2">
+                <Weight className="h-4 w-4 sm:h-5 sm:w-5" />
                 Waga (kg)
               </Label>
               <Input
@@ -291,14 +292,14 @@ export const DogForm = ({ open, onOpenChange, dog, onSuccess }: DogFormProps) =>
                 step="0.1"
                 value={formData.weight_kg}
                 onChange={(e) => handleInputChange("weight_kg", e.target.value)}
-                className="mt-2 text-lg h-12"
+                className="mt-2 text-base sm:text-lg h-10 sm:h-12"
                 placeholder="np. 2.5"
               />
             </div>
 
             <div className="md:col-span-2">
-              <Label htmlFor="birthday" className="text-lg font-semibold flex items-center gap-2">
-                <Calendar className="h-5 w-5" />
+              <Label htmlFor="birthday" className="text-base sm:text-lg font-semibold flex items-center gap-2">
+                <Calendar className="h-4 w-4 sm:h-5 sm:w-5" />
                 Data urodzenia 🎂
               </Label>
               <Input
@@ -306,32 +307,32 @@ export const DogForm = ({ open, onOpenChange, dog, onSuccess }: DogFormProps) =>
                 type="date"
                 value={formData.birthday}
                 onChange={(e) => handleInputChange("birthday", e.target.value)}
-                className="mt-2 text-lg h-12"
+                className="mt-2 text-base sm:text-lg h-10 sm:h-12"
               />
             </div>
           </div>
 
           <div className="space-y-4">
             <div>
-              <Label htmlFor="short_description" className="text-lg font-semibold">Krótki opis 📝</Label>
+              <Label htmlFor="short_description" className="text-base sm:text-lg font-semibold">Krótki opis 📝</Label>
               <Textarea
                 id="short_description"
                 value={formData.short_description}
                 onChange={(e) => handleInputChange("short_description", e.target.value)}
                 rows={3}
-                className="mt-2 text-lg"
+                className="mt-2 text-base sm:text-lg"
                 placeholder="Napisz krótki opis psiaka..."
               />
             </div>
 
             <div>
-              <Label htmlFor="long_description" className="text-lg font-semibold">Długi opis 📖</Label>
+              <Label htmlFor="long_description" className="text-base sm:text-lg font-semibold">Długi opis 📖</Label>
               <Textarea
                 id="long_description"
                 value={formData.long_description}
                 onChange={(e) => handleInputChange("long_description", e.target.value)}
                 rows={5}
-                className="mt-2 text-lg"
+                className="mt-2 text-base sm:text-lg"
                 placeholder="Napisz szczegółowy opis psiaka..."
               />
             </div>
@@ -356,11 +357,11 @@ export const DogForm = ({ open, onOpenChange, dog, onSuccess }: DogFormProps) =>
             />
           )}
 
-          <div className="flex gap-4 pt-6">
-            <Button type="submit" disabled={loading} className="flex-1 h-14 text-lg font-semibold">
+          <div className="flex flex-col sm:flex-row gap-4 pt-6">
+            <Button type="submit" disabled={loading} className="flex-1 h-12 sm:h-14 text-base sm:text-lg font-semibold">
               {loading ? "Zapisywanie... ⏳" : dog ? "💾 Zaktualizuj Psa" : "✨ Dodaj Psa"}
             </Button>
-            <Button type="button" variant="outline" onClick={() => onOpenChange(false)} className="h-14 px-8 text-lg">
+            <Button type="button" variant="outline" onClick={() => onOpenChange(false)} className="h-12 sm:h-14 px-6 sm:px-8 text-base sm:text-lg">
               ❌ Anuluj
             </Button>
           </div>
