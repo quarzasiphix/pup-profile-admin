@@ -9,7 +9,86 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      dog_images: {
+        Row: {
+          created_at: string
+          dog_id: string
+          id: string
+          image_name: string | null
+          image_url: string
+          is_thumbnail: boolean
+          sort_order: number | null
+        }
+        Insert: {
+          created_at?: string
+          dog_id: string
+          id?: string
+          image_name?: string | null
+          image_url: string
+          is_thumbnail?: boolean
+          sort_order?: number | null
+        }
+        Update: {
+          created_at?: string
+          dog_id?: string
+          id?: string
+          image_name?: string | null
+          image_url?: string
+          is_thumbnail?: boolean
+          sort_order?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "dog_images_dog_id_fkey"
+            columns: ["dog_id"]
+            isOneToOne: false
+            referencedRelation: "dogs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      dogs: {
+        Row: {
+          birthday: string | null
+          created_at: string
+          id: string
+          is_active: boolean
+          long_description: string | null
+          name: string
+          short_description: string | null
+          thumbnail_url: string | null
+          type: Database["public"]["Enums"]["dog_type"]
+          updated_at: string
+          weight_kg: number | null
+        }
+        Insert: {
+          birthday?: string | null
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          long_description?: string | null
+          name: string
+          short_description?: string | null
+          thumbnail_url?: string | null
+          type: Database["public"]["Enums"]["dog_type"]
+          updated_at?: string
+          weight_kg?: number | null
+        }
+        Update: {
+          birthday?: string | null
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          long_description?: string | null
+          name?: string
+          short_description?: string | null
+          thumbnail_url?: string | null
+          type?: Database["public"]["Enums"]["dog_type"]
+          updated_at?: string
+          weight_kg?: number | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -18,7 +97,7 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      dog_type: "puppy" | "adult_male" | "adult_female"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -133,6 +212,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      dog_type: ["puppy", "adult_male", "adult_female"],
+    },
   },
 } as const
