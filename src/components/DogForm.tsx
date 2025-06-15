@@ -4,12 +4,15 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Badge } from "@/components/ui/badge";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { ImageUpload } from "@/components/ImageUpload";
 import { ThumbnailSelector } from "@/components/ThumbnailSelector";
+import { Heart, Baby, Calendar, Weight } from "lucide-react";
 import type { Tables } from "@/integrations/supabase/types";
 
 type Dog = Tables<"dogs">;
@@ -170,114 +173,190 @@ export const DogForm = ({ open, onOpenChange, dog, onSuccess }: DogFormProps) =>
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>{dog ? "Edytuj Psa" : "Dodaj Nowego Psa"}</DialogTitle>
+          <DialogTitle className="text-2xl font-bold text-center">
+            {dog ? "🐕 Edytuj Psa" : "🐶 Dodaj Nowego Psa"}
+          </DialogTitle>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <form onSubmit={handleSubmit} className="space-y-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <Label htmlFor="name">Imię *</Label>
+              <Label htmlFor="name" className="text-lg font-semibold">Imię psiaka 🏷️</Label>
               <Input
                 id="name"
                 value={formData.name}
                 onChange={(e) => handleInputChange("name", e.target.value)}
                 required
+                className="mt-2 text-lg h-12"
+                placeholder="Podaj imię..."
               />
             </div>
 
-            <div>
-              <Label htmlFor="breed">Rasa *</Label>
-              <Select value={formData.breed} onValueChange={(value) => handleInputChange("breed", value)}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Wybierz rasę" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="yorkshire_terrier">Yorkshire Terrier</SelectItem>
-                  <SelectItem value="pomeranian">Pomeranian</SelectItem>
-                </SelectContent>
-              </Select>
+            <div className="md:col-span-2">
+              <Label className="text-lg font-semibold mb-4 block">Rasa 🐕</Label>
+              <ToggleGroup 
+                type="single" 
+                value={formData.breed} 
+                onValueChange={(value) => value && handleInputChange("breed", value)}
+                className="grid grid-cols-1 md:grid-cols-2 gap-4"
+              >
+                <ToggleGroupItem 
+                  value="yorkshire_terrier" 
+                  className="h-16 text-lg font-semibold data-[state=on]:bg-amber-100 data-[state=on]:text-amber-800 data-[state=on]:border-amber-300 border-2"
+                >
+                  <div className="flex items-center gap-3">
+                    <span className="text-2xl">🐕</span>
+                    <span>Yorkshire Terrier</span>
+                  </div>
+                </ToggleGroupItem>
+                <ToggleGroupItem 
+                  value="pomeranian"
+                  className="h-16 text-lg font-semibold data-[state=on]:bg-orange-100 data-[state=on]:text-orange-800 data-[state=on]:border-orange-300 border-2"
+                >
+                  <div className="flex items-center gap-3">
+                    <span className="text-2xl">🦮</span>
+                    <span>Pomeranian</span>
+                  </div>
+                </ToggleGroupItem>
+              </ToggleGroup>
             </div>
 
             <div>
-              <Label htmlFor="age">Wiek *</Label>
-              <Select value={formData.age} onValueChange={(value) => handleInputChange("age", value)}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Wybierz wiek" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="puppy">Szczenię</SelectItem>
-                  <SelectItem value="adult">Dorosły</SelectItem>
-                </SelectContent>
-              </Select>
+              <Label className="text-lg font-semibold mb-4 block">Wiek 📅</Label>
+              <RadioGroup 
+                value={formData.age} 
+                onValueChange={(value) => handleInputChange("age", value)}
+                className="space-y-3"
+              >
+                <div className="flex items-center space-x-3 p-4 rounded-lg border-2 hover:bg-blue-50 has-[:checked]:bg-blue-100 has-[:checked]:border-blue-300">
+                  <RadioGroupItem value="puppy" id="puppy" className="w-5 h-5" />
+                  <Label htmlFor="puppy" className="flex items-center gap-2 text-lg font-medium cursor-pointer flex-1">
+                    <Baby className="h-5 w-5 text-blue-600" />
+                    Szczenię
+                    <Badge className="bg-blue-100 text-blue-800 ml-auto">Młode</Badge>
+                  </Label>
+                </div>
+                <div className="flex items-center space-x-3 p-4 rounded-lg border-2 hover:bg-green-50 has-[:checked]:bg-green-100 has-[:checked]:border-green-300">
+                  <RadioGroupItem value="adult" id="adult" className="w-5 h-5" />
+                  <Label htmlFor="adult" className="flex items-center gap-2 text-lg font-medium cursor-pointer flex-1">
+                    <Heart className="h-5 w-5 text-green-600" />
+                    Dorosły
+                    <Badge className="bg-green-100 text-green-800 ml-auto">Dojrzały</Badge>
+                  </Label>
+                </div>
+              </RadioGroup>
             </div>
 
             <div>
-              <Label htmlFor="gender">Płeć *</Label>
-              <Select value={formData.gender} onValueChange={(value) => handleInputChange("gender", value)}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Wybierz płeć" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="male">Samiec</SelectItem>
-                  <SelectItem value="female">Samica</SelectItem>
-                </SelectContent>
-              </Select>
+              <Label className="text-lg font-semibold mb-4 block">Płeć 🚻</Label>
+              <RadioGroup 
+                value={formData.gender} 
+                onValueChange={(value) => handleInputChange("gender", value)}
+                className="space-y-3"
+              >
+                <div className="flex items-center space-x-3 p-4 rounded-lg border-2 hover:bg-indigo-50 has-[:checked]:bg-indigo-100 has-[:checked]:border-indigo-300">
+                  <RadioGroupItem value="male" id="male" className="w-5 h-5" />
+                  <Label htmlFor="male" className="flex items-center gap-2 text-lg font-medium cursor-pointer flex-1">
+                    <span className="text-2xl">♂️</span>
+                    Samiec
+                    <Badge className="bg-indigo-100 text-indigo-800 ml-auto">Chłopiec</Badge>
+                  </Label>
+                </div>
+                <div className="flex items-center space-x-3 p-4 rounded-lg border-2 hover:bg-pink-50 has-[:checked]:bg-pink-100 has-[:checked]:border-pink-300">
+                  <RadioGroupItem value="female" id="female" className="w-5 h-5" />
+                  <Label htmlFor="female" className="flex items-center gap-2 text-lg font-medium cursor-pointer flex-1">
+                    <span className="text-2xl">♀️</span>
+                    Samica
+                    <Badge className="bg-pink-100 text-pink-800 ml-auto">Dziewczynka</Badge>
+                  </Label>
+                </div>
+              </RadioGroup>
             </div>
 
             <div>
-              <Label htmlFor="type">Typ (legacy) *</Label>
-              <Select value={formData.type} onValueChange={(value) => handleInputChange("type", value)}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Wybierz typ psa" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="puppy">Szczenię</SelectItem>
-                  <SelectItem value="adult_male">Dorosły Samiec</SelectItem>
-                  <SelectItem value="adult_female">Dorosła Samica</SelectItem>
-                </SelectContent>
-              </Select>
+              <Label className="text-lg font-semibold mb-4 block">Typ (stary system) ⚙️</Label>
+              <ToggleGroup 
+                type="single" 
+                value={formData.type} 
+                onValueChange={(value) => value && handleInputChange("type", value)}
+                className="grid grid-cols-1 gap-2"
+              >
+                <ToggleGroupItem 
+                  value="puppy" 
+                  className="h-12 text-sm data-[state=on]:bg-gray-100 data-[state=on]:text-gray-800"
+                >
+                  Szczenię (legacy)
+                </ToggleGroupItem>
+                <ToggleGroupItem 
+                  value="adult_male"
+                  className="h-12 text-sm data-[state=on]:bg-gray-100 data-[state=on]:text-gray-800"
+                >
+                  Dorosły Samiec (legacy)
+                </ToggleGroupItem>
+                <ToggleGroupItem 
+                  value="adult_female"
+                  className="h-12 text-sm data-[state=on]:bg-gray-100 data-[state=on]:text-gray-800"
+                >
+                  Dorosła Samica (legacy)
+                </ToggleGroupItem>
+              </ToggleGroup>
             </div>
 
             <div>
-              <Label htmlFor="weight">Waga (kg)</Label>
+              <Label htmlFor="weight" className="text-lg font-semibold flex items-center gap-2">
+                <Weight className="h-5 w-5" />
+                Waga (kg)
+              </Label>
               <Input
                 id="weight"
                 type="number"
                 step="0.1"
                 value={formData.weight_kg}
                 onChange={(e) => handleInputChange("weight_kg", e.target.value)}
+                className="mt-2 text-lg h-12"
+                placeholder="np. 2.5"
               />
             </div>
 
             <div className="md:col-span-2">
-              <Label htmlFor="birthday">Data urodzenia</Label>
+              <Label htmlFor="birthday" className="text-lg font-semibold flex items-center gap-2">
+                <Calendar className="h-5 w-5" />
+                Data urodzenia 🎂
+              </Label>
               <Input
                 id="birthday"
                 type="date"
                 value={formData.birthday}
                 onChange={(e) => handleInputChange("birthday", e.target.value)}
+                className="mt-2 text-lg h-12"
               />
             </div>
           </div>
 
-          <div>
-            <Label htmlFor="short_description">Krótki opis</Label>
-            <Textarea
-              id="short_description"
-              value={formData.short_description}
-              onChange={(e) => handleInputChange("short_description", e.target.value)}
-              rows={2}
-            />
-          </div>
+          <div className="space-y-4">
+            <div>
+              <Label htmlFor="short_description" className="text-lg font-semibold">Krótki opis 📝</Label>
+              <Textarea
+                id="short_description"
+                value={formData.short_description}
+                onChange={(e) => handleInputChange("short_description", e.target.value)}
+                rows={3}
+                className="mt-2 text-lg"
+                placeholder="Napisz krótki opis psiaka..."
+              />
+            </div>
 
-          <div>
-            <Label htmlFor="long_description">Długi opis</Label>
-            <Textarea
-              id="long_description"
-              value={formData.long_description}
-              onChange={(e) => handleInputChange("long_description", e.target.value)}
-              rows={4}
-            />
+            <div>
+              <Label htmlFor="long_description" className="text-lg font-semibold">Długi opis 📖</Label>
+              <Textarea
+                id="long_description"
+                value={formData.long_description}
+                onChange={(e) => handleInputChange("long_description", e.target.value)}
+                rows={5}
+                className="mt-2 text-lg"
+                placeholder="Napisz szczegółowy opis psiaka..."
+              />
+            </div>
           </div>
 
           <ImageUpload
@@ -295,12 +374,12 @@ export const DogForm = ({ open, onOpenChange, dog, onSuccess }: DogFormProps) =>
             />
           )}
 
-          <div className="flex gap-2 pt-4">
-            <Button type="submit" disabled={loading} className="flex-1">
-              {loading ? "Zapisywanie..." : dog ? "Zaktualizuj Psa" : "Dodaj Psa"}
+          <div className="flex gap-4 pt-6">
+            <Button type="submit" disabled={loading} className="flex-1 h-14 text-lg font-semibold">
+              {loading ? "Zapisywanie... ⏳" : dog ? "💾 Zaktualizuj Psa" : "✨ Dodaj Psa"}
             </Button>
-            <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
-              Anuluj
+            <Button type="button" variant="outline" onClick={() => onOpenChange(false)} className="h-14 px-8 text-lg">
+              ❌ Anuluj
             </Button>
           </div>
         </form>
