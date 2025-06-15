@@ -42,6 +42,7 @@ export const DogForm = ({ open, onOpenChange, dog, onSuccess }: DogFormProps) =>
     is_thumbnail: boolean;
   }>>([]);
   const [loading, setLoading] = useState(false);
+  const [imageUploading, setImageUploading] = useState(false);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -94,6 +95,17 @@ export const DogForm = ({ open, onOpenChange, dog, onSuccess }: DogFormProps) =>
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+
+    // Basic validation for required enum fields
+    if (!formData.breed || !formData.age || !formData.gender) {
+      toast({
+        title: "Błąd",
+        description: "Uzupełnij pola rasa, wiek oraz płeć przed zapisaniem.",
+        variant: "destructive",
+      });
+      setLoading(false);
+      return;
+    }
 
     try {
       const dogData = {
@@ -342,6 +354,7 @@ export const DogForm = ({ open, onOpenChange, dog, onSuccess }: DogFormProps) =>
             images={images}
             onImagesChange={setImages}
             maxImages={5}
+            onUploadingChange={setImageUploading}
           />
 
           {images.length > 0 && (
@@ -357,7 +370,7 @@ export const DogForm = ({ open, onOpenChange, dog, onSuccess }: DogFormProps) =>
           )}
 
           <div className="sticky bottom-0 -mx-4 -mb-4 sm:-mx-6 sm:-mb-6 bg-background border-t p-4 sm:p-6 flex flex-col sm:flex-row gap-4 z-10">
-            <Button type="submit" disabled={loading} className="flex-1 h-12 sm:h-14 text-base sm:text-lg font-semibold">
+            <Button type="submit" disabled={loading || imageUploading} className="flex-1 h-12 sm:h-14 text-base sm:text-lg font-semibold">
               {loading ? "Zapisywanie... ⏳" : dog ? "💾 Zaktualizuj Psa" : "✨ Dodaj Psa"}
             </Button>
             <Button type="button" variant="outline" onClick={() => onOpenChange(false)} className="h-12 sm:h-14 px-6 sm:px-8 text-base sm:text-lg">

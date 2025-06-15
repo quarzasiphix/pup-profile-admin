@@ -40,32 +40,6 @@ export const AuthPage = () => {
     }
   };
 
-  const handleAppLogin = async () => {
-    setAppLoading(true);
-
-    try {
-      const { error } = await supabase.auth.signInWithPassword({
-        email: "test@quarza.online",
-        password: "nigga123",
-      });
-
-      if (error) throw error;
-
-      toast({
-        title: "Sukces",
-        description: "Zalogowano do aplikacji",
-      });
-    } catch (error: any) {
-      toast({
-        title: "Błąd",
-        description: error.message,
-        variant: "destructive",
-      });
-    } finally {
-      setAppLoading(false);
-    }
-  };
-
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-purple-50 p-4">
       <div className="w-full max-w-md p-8 space-y-8 bg-white rounded-2xl shadow-lg">
@@ -77,13 +51,6 @@ export const AuthPage = () => {
         </div>
 
         <div className="space-y-6">
-          <Button
-            onClick={handleAppLogin}
-            className="w-full h-16 text-lg font-semibold"
-            disabled={appLoading}
-          >
-            {appLoading ? "Ładowanie..." : "Kontynuuj do aplikacji"}
-          </Button>
 
           <div className="relative">
             <div className="absolute inset-0 flex items-center">

@@ -1,5 +1,4 @@
-
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
@@ -22,17 +21,24 @@ interface ImageUploadProps {
     is_thumbnail: boolean;
   }>) => void;
   maxImages?: number;
+  onUploadingChange?: (uploading: boolean) => void;
 }
 
 export const ImageUpload = ({ 
   dogId, 
   images, 
   onImagesChange, 
-  maxImages = 5 
+  maxImages = 5,
+  onUploadingChange
 }: ImageUploadProps) => {
   const [uploading, setUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
+
+  // Notify parent whenever uploading state changes
+  useEffect(() => {
+    onUploadingChange?.(uploading)
+  }, [uploading, onUploadingChange])
 
   const optimizeImage = (file: File): Promise<File> => {
     return new Promise((resolve) => {
