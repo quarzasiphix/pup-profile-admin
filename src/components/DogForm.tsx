@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -12,7 +11,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { ImageUpload } from "@/components/ImageUpload";
 import { ThumbnailSelector } from "@/components/ThumbnailSelector";
-import { Heart, Baby, Calendar, Weight } from "lucide-react";
+import { Heart, Baby, Calendar, Weight, X } from "lucide-react";
 import type { Tables } from "@/integrations/supabase/types";
 
 type Dog = Tables<"dogs">;
@@ -170,9 +169,18 @@ export const DogForm = ({ open, onOpenChange, dog, onSuccess }: DogFormProps) =>
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto relative">
+        {/* Sticky Close Button */}
+        <button
+          onClick={() => onOpenChange(false)}
+          className="fixed top-4 right-4 z-50 bg-white hover:bg-gray-100 rounded-full p-2 shadow-lg border border-gray-200 transition-all duration-200 hover:shadow-xl"
+          aria-label="Zamknij"
+        >
+          <X className="h-5 w-5 text-gray-600" />
+        </button>
+
         <DialogHeader>
-          <DialogTitle className="text-2xl font-bold text-center">
+          <DialogTitle className="text-2xl font-bold text-center pr-12">
             {dog ? "🐕 Edytuj Psa" : "🐶 Dodaj Nowego Psa"}
           </DialogTitle>
         </DialogHeader>
