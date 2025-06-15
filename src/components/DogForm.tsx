@@ -9,6 +9,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { ImageUpload } from "@/components/ImageUpload";
+import { ThumbnailSelector } from "@/components/ThumbnailSelector";
 import type { Tables } from "@/integrations/supabase/types";
 
 type Dog = Tables<"dogs">;
@@ -35,6 +36,7 @@ export const DogForm = ({ open, onOpenChange, dog, onSuccess }: DogFormProps) =>
     image_name: string | null;
     sort_order: number | null;
   }>>([]);
+  const [selectedThumbnail, setSelectedThumbnail] = useState<string>("");
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
 
@@ -48,6 +50,7 @@ export const DogForm = ({ open, onOpenChange, dog, onSuccess }: DogFormProps) =>
         weight_kg: dog.weight_kg?.toString() || "",
         birthday: dog.birthday || "",
       });
+      setSelectedThumbnail(dog.thumbnail_url || "");
       fetchDogImages(dog.id);
     } else {
       setFormData({
@@ -59,6 +62,7 @@ export const DogForm = ({ open, onOpenChange, dog, onSuccess }: DogFormProps) =>
         birthday: "",
       });
       setImages([]);
+      setSelectedThumbnail("");
     }
   }, [dog, open]);
 
@@ -86,9 +90,6 @@ export const DogForm = ({ open, onOpenChange, dog, onSuccess }: DogFormProps) =>
     setLoading(true);
 
     try {
-      // Set thumbnail URL to first image if available
-      const thumbnailUrl = images.length > 0 ? images[0].image_url : null;
-
       const dogData = {
         name: formData.name,
         type: formData.type as "puppy" | "adult_male" | "adult_female",
@@ -96,7 +97,7 @@ export const DogForm = ({ open, onOpenChange, dog, onSuccess }: DogFormProps) =>
         long_description: formData.long_description || null,
         weight_kg: formData.weight_kg ? parseFloat(formData.weight_kg) : null,
         birthday: formData.birthday || null,
-        thumbnail_url: thumbnailUrl,
+        thumbnail_url: selectedThumbnail || null,
       };
 
       let dogId: string;
@@ -234,6 +235,14 @@ export const DogForm = ({ open, onOpenChange, dog, onSuccess }: DogFormProps) =>
             onImagesChange={setImages}
             maxImages={5}
           />
+
+          {images.length > 0 && (
+            <ThumbnailSelector
+              images={images}
+              selectedThumbnail={selectedThumbnail}
+              onThumbnailChange={setSelectedThumbnail}
+            />
+          )}
 
           <div className="flex gap-2 pt-4">
             <Button type="submit" disabled={loading} className="flex-1">
