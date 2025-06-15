@@ -56,45 +56,45 @@ export const DogCard = ({ dog, onEdit, onDelete }: DogCardProps) => {
   const getAgeColor = (age: string) => {
     switch (age) {
       case "puppy":
-        return "bg-blue-100 text-blue-800";
+        return "bg-blue-100 text-blue-800 border-blue-200";
       case "adult":
-        return "bg-green-100 text-green-800";
+        return "bg-green-100 text-green-800 border-green-200";
       default:
-        return "bg-gray-100 text-gray-800";
+        return "bg-gray-100 text-gray-800 border-gray-200";
     }
   };
 
   const getGenderColor = (gender: string) => {
     switch (gender) {
       case "male":
-        return "bg-indigo-100 text-indigo-800";
+        return "bg-indigo-100 text-indigo-800 border-indigo-200";
       case "female":
-        return "bg-pink-100 text-pink-800";
+        return "bg-pink-100 text-pink-800 border-pink-200";
       default:
-        return "bg-gray-100 text-gray-800";
+        return "bg-gray-100 text-gray-800 border-gray-200";
     }
   };
 
   return (
-    <Card className="hover:shadow-lg transition-shadow">
-      <CardHeader className="pb-3">
-        <div className="flex flex-col space-y-2">
-          <CardTitle className="text-lg md:text-xl text-center md:text-left">
+    <Card className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 border-0">
+      <CardHeader className="pb-4">
+        <div className="text-center space-y-3">
+          <CardTitle className="text-2xl font-bold text-gray-800">
             {dog.name}
           </CardTitle>
-          <div className="flex flex-wrap gap-2 justify-center md:justify-start">
+          <div className="flex flex-wrap gap-2 justify-center">
             {dog.breed && (
-              <Badge className="bg-purple-100 text-purple-800 text-xs">
+              <Badge className="bg-purple-100 text-purple-800 border-purple-200 text-sm px-3 py-1 font-semibold">
                 {formatBreed(dog.breed)}
               </Badge>
             )}
             {dog.age && (
-              <Badge className={`${getAgeColor(dog.age)} text-xs`}>
+              <Badge className={`${getAgeColor(dog.age)} text-sm px-3 py-1 font-semibold border`}>
                 {formatAge(dog.age)}
               </Badge>
             )}
             {dog.gender && (
-              <Badge className={`${getGenderColor(dog.gender)} text-xs`}>
+              <Badge className={`${getGenderColor(dog.gender)} text-sm px-3 py-1 font-semibold border`}>
                 {formatGender(dog.gender)}
               </Badge>
             )}
@@ -102,49 +102,55 @@ export const DogCard = ({ dog, onEdit, onDelete }: DogCardProps) => {
         </div>
       </CardHeader>
       
-      <CardContent className="space-y-3">
+      <CardContent className="space-y-4 px-6">
         <ImageGallery dogId={dog.id} />
         
         {dog.short_description && (
-          <p className="text-gray-600 text-sm line-clamp-2 text-center md:text-left">
-            {dog.short_description}
-          </p>
+          <div className="bg-gray-50 rounded-xl p-4">
+            <p className="text-gray-700 text-base leading-relaxed text-center">
+              {dog.short_description}
+            </p>
+          </div>
         )}
         
-        <div className="flex flex-col space-y-1 md:flex-row md:flex-wrap md:gap-2 md:space-y-0 text-sm text-gray-500">
+        <div className="flex flex-col space-y-3 text-center">
           {dog.birthday && (
-            <div className="flex items-center justify-center md:justify-start gap-1">
-              <Calendar className="h-3 w-3" />
-              <span className="text-xs md:text-sm">{formatDate(dog.birthday)}</span>
+            <div className="flex items-center justify-center gap-2 bg-blue-50 rounded-lg p-3">
+              <Calendar className="h-5 w-5 text-blue-600" />
+              <span className="text-base font-medium text-blue-800">
+                Urodzony: {formatDate(dog.birthday)}
+              </span>
             </div>
           )}
           {dog.weight_kg && (
-            <div className="flex items-center justify-center md:justify-start gap-1">
-              <Weight className="h-3 w-3" />
-              <span className="text-xs md:text-sm">{dog.weight_kg} kg</span>
+            <div className="flex items-center justify-center gap-2 bg-green-50 rounded-lg p-3">
+              <Weight className="h-5 w-5 text-green-600" />
+              <span className="text-base font-medium text-green-800">
+                Waga: {dog.weight_kg} kg
+              </span>
             </div>
           )}
         </div>
       </CardContent>
       
-      <CardFooter className="flex flex-col space-y-2 md:flex-row md:gap-2 md:space-y-0 pt-3">
+      <CardFooter className="flex flex-col space-y-3 pt-6 px-6">
         <Button
           variant="outline"
-          size="sm"
+          size="lg"
           onClick={() => onEdit(dog)}
-          className="w-full md:flex-1 text-sm"
+          className="w-full text-base font-semibold py-3 border-2 border-blue-300 text-blue-700 hover:bg-blue-50 hover:border-blue-400 rounded-xl transition-all duration-200"
         >
-          <Edit className="h-3 w-3 mr-1" />
-          Edytuj
+          <Edit className="h-5 w-5 mr-2" />
+          Edytuj Psa
         </Button>
         <Button
           variant="outline"
-          size="sm"
+          size="lg"
           onClick={() => onDelete(dog.id)}
-          className="w-full md:flex-1 text-red-600 hover:text-red-700 text-sm"
+          className="w-full text-base font-semibold py-3 border-2 border-red-300 text-red-700 hover:bg-red-50 hover:border-red-400 rounded-xl transition-all duration-200"
         >
-          <Trash2 className="h-3 w-3 mr-1" />
-          Usuń
+          <Trash2 className="h-5 w-5 mr-2" />
+          Usuń Psa
         </Button>
       </CardFooter>
     </Card>

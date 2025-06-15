@@ -93,57 +93,92 @@ const Index = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="container mx-auto px-4 py-6">
-        <div className="mb-6">
-          <div className="text-center md:text-left mb-4">
-            <h1 className="text-2xl md:text-4xl font-bold text-gray-900 mb-2">
-              System Zarządzania Hodowlą Psów
-            </h1>
-            <p className="text-sm md:text-base text-gray-600">
-              Zarządzaj swoimi psami hodowlanymi i ich informacjami
-            </p>
-          </div>
-          <div className="flex justify-center md:justify-end">
-            <Button 
-              onClick={handleAddDog} 
-              className="w-full md:w-auto flex items-center justify-center gap-2 px-6 py-3"
-            >
-              <Plus className="h-4 w-4" />
-              <span className="text-sm md:text-base">Dodaj Nowego Psa</span>
-            </Button>
-          </div>
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50">
+      <div className="container mx-auto px-4 py-6 max-w-6xl">
+        {/* Header Section */}
+        <div className="text-center mb-8">
+          <h1 className="text-3xl md:text-5xl font-bold text-gray-800 mb-4">
+            🐕 Moja Hodowla Psów
+          </h1>
+          <p className="text-lg md:text-xl text-gray-600 mb-6 max-w-2xl mx-auto leading-relaxed">
+            Zarządzaj swoimi ukochanymi psami hodowlanymi w jednym miejscu
+          </p>
+          
+          {/* Large Add Button */}
+          <Button 
+            onClick={handleAddDog} 
+            size="lg"
+            className="bg-green-600 hover:bg-green-700 text-white px-8 py-4 text-lg md:text-xl font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105"
+          >
+            <Plus className="h-6 w-6 mr-3" />
+            Dodaj Nowego Psa
+          </Button>
         </div>
 
+        {/* Content Area */}
         {isLoading ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
             {[...Array(6)].map((_, i) => (
-              <div key={i} className="bg-white rounded-lg shadow-md h-80 md:h-96 animate-pulse" />
+              <div key={i} className="bg-white rounded-2xl shadow-lg h-96 animate-pulse" />
             ))}
           </div>
         ) : dogs.length === 0 ? (
-          <div className="text-center py-12 px-4">
-            <h3 className="text-lg md:text-xl font-medium text-gray-900 mb-2">
-              Nie dodano jeszcze żadnych psów
-            </h3>
-            <p className="text-sm md:text-base text-gray-600 mb-4">
-              Zacznij od dodania swojego pierwszego psa do systemu
-            </p>
-            <Button onClick={handleAddDog} className="w-full md:w-auto">
-              Dodaj Swojego Pierwszego Psa
-            </Button>
+          <div className="text-center py-16 px-4">
+            <div className="bg-white rounded-3xl shadow-lg p-8 md:p-12 max-w-md mx-auto">
+              <div className="text-6xl mb-6">🐶</div>
+              <h3 className="text-xl md:text-2xl font-bold text-gray-800 mb-4">
+                Brak psów w hodowli
+              </h3>
+              <p className="text-lg text-gray-600 mb-6 leading-relaxed">
+                Zacznij od dodania swojego pierwszego psa do systemu
+              </p>
+              <Button 
+                onClick={handleAddDog} 
+                size="lg"
+                className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-200"
+              >
+                <Plus className="h-5 w-5 mr-2" />
+                Dodaj Pierwszego Psa
+              </Button>
+            </div>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-            {dogs.map((dog) => (
-              <DogCard
-                key={dog.id}
-                dog={dog}
-                onEdit={handleEditDog}
-                onDelete={handleDeleteDog}
-              />
-            ))}
-          </div>
+          <>
+            {/* Dogs Count */}
+            <div className="text-center mb-8">
+              <div className="inline-flex items-center bg-white rounded-full px-6 py-3 shadow-lg">
+                <div className="text-2xl mr-3">🏠</div>
+                <span className="text-lg font-semibold text-gray-700">
+                  {dogs.length} {dogs.length === 1 ? 'pies' : dogs.length < 5 ? 'psy' : 'psów'} w hodowli
+                </span>
+              </div>
+            </div>
+
+            {/* Dogs Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+              {dogs.map((dog) => (
+                <DogCard
+                  key={dog.id}
+                  dog={dog}
+                  onEdit={handleEditDog}
+                  onDelete={handleDeleteDog}
+                />
+              ))}
+            </div>
+
+            {/* Bottom Add Button for easier access */}
+            <div className="text-center mt-12">
+              <Button 
+                onClick={handleAddDog} 
+                size="lg"
+                variant="outline"
+                className="border-2 border-green-600 text-green-600 hover:bg-green-600 hover:text-white px-8 py-4 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-200"
+              >
+                <Plus className="h-5 w-5 mr-3" />
+                Dodaj Kolejnego Psa
+              </Button>
+            </div>
+          </>
         )}
 
         <DogForm
