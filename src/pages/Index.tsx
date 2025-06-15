@@ -1,11 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import { DogCard } from "@/components/DogCard";
 import { DogForm } from "@/components/DogForm";
-import { AuthDialog } from "@/components/AuthDialog";
+import { AuthPage } from "@/pages/AuthPage";
 import { useToast } from "@/hooks/use-toast";
 import type { Tables } from "@/integrations/supabase/types";
 
@@ -14,24 +14,21 @@ type Dog = Tables<"dogs">;
 const Index = () => {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingDog, setEditingDog] = useState<Dog | null>(null);
-  const [isAuthOpen, setIsAuthOpen] = useState(false);
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState<any>(null);
   const { toast } = useToast();
 
   // Check auth status
-  useState(() => {
-    supabase.auth.getUser().then(({ data: { user } }) => {
-      setUser(user);
-      if (!user) setIsAuthOpen(true);
+  useEffect(() => {
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null);
     });
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-      setUser(session?.user || null);
-      if (!session?.user) setIsAuthOpen(true);
-    });
-
-    return () => subscription.unsubscribe();
-  });
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, []);
 
   const { data: dogs = [], isLoading, refetch } = useQuery({
     queryKey: ["dogs"],
@@ -88,7 +85,7 @@ const Index = () => {
   };
 
   if (!user) {
-    return <AuthDialog open={isAuthOpen} onOpenChange={setIsAuthOpen} />;
+    return <AuthPage />;
   }
 
   return (

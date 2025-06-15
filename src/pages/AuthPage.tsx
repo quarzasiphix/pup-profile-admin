@@ -3,16 +3,10 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 
-interface AuthDialogProps {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-}
-
-export const AuthDialog = ({ open, onOpenChange }: AuthDialogProps) => {
+export const AuthPage = () => {
   const [loading, setLoading] = useState(false);
   const [appLoading, setAppLoading] = useState(false);
   const [email, setEmail] = useState("");
@@ -31,7 +25,6 @@ export const AuthDialog = ({ open, onOpenChange }: AuthDialogProps) => {
 
       if (error) throw error;
 
-      onOpenChange(false);
       toast({
         title: "Sukces",
         description: "Zalogowano pomyślnie",
@@ -58,7 +51,6 @@ export const AuthDialog = ({ open, onOpenChange }: AuthDialogProps) => {
 
       if (error) throw error;
 
-      onOpenChange(false);
       toast({
         title: "Sukces",
         description: "Zalogowano do aplikacji",
@@ -75,16 +67,19 @@ export const AuthDialog = ({ open, onOpenChange }: AuthDialogProps) => {
   };
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md">
-        <DialogHeader>
-          <DialogTitle>Dostęp do Systemu Zarządzania Hodowlą Psów</DialogTitle>
-        </DialogHeader>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-purple-50 p-4">
+      <div className="w-full max-w-md p-8 space-y-8 bg-white rounded-2xl shadow-lg">
+        <div className="text-center">
+          <h1 className="text-2xl md:text-3xl font-bold text-gray-800">
+            Dostęp do Systemu
+          </h1>
+          <p className="text-gray-600 mt-2">Zarządzanie Hodowlą Psów</p>
+        </div>
 
         <div className="space-y-6">
-          <Button 
-            onClick={handleAppLogin} 
-            className="w-full h-16 text-lg font-semibold" 
+          <Button
+            onClick={handleAppLogin}
+            className="w-full h-16 text-lg font-semibold"
             disabled={appLoading}
           >
             {appLoading ? "Ładowanie..." : "Kontynuuj do aplikacji"}
@@ -95,7 +90,7 @@ export const AuthDialog = ({ open, onOpenChange }: AuthDialogProps) => {
               <span className="w-full border-t" />
             </div>
             <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-background px-2 text-muted-foreground">
+              <span className="bg-white px-2 text-muted-foreground">
                 Lub zaloguj się
               </span>
             </div>
@@ -110,6 +105,7 @@ export const AuthDialog = ({ open, onOpenChange }: AuthDialogProps) => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
+                placeholder="email@example.com"
               />
             </div>
             <div>
@@ -120,6 +116,7 @@ export const AuthDialog = ({ open, onOpenChange }: AuthDialogProps) => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
+                placeholder="••••••••"
               />
             </div>
             <Button type="submit" variant="outline" className="w-full" disabled={loading}>
@@ -127,7 +124,7 @@ export const AuthDialog = ({ open, onOpenChange }: AuthDialogProps) => {
             </Button>
           </form>
         </div>
-      </DialogContent>
-    </Dialog>
+      </div>
+    </div>
   );
 };
