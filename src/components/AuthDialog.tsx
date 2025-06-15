@@ -14,7 +14,7 @@ interface AuthDialogProps {
 
 export const AuthDialog = ({ open, onOpenChange }: AuthDialogProps) => {
   const [loading, setLoading] = useState(false);
-  const [guestLoading, setGuestLoading] = useState(false);
+  const [appLoading, setAppLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { toast } = useToast();
@@ -47,8 +47,8 @@ export const AuthDialog = ({ open, onOpenChange }: AuthDialogProps) => {
     }
   };
 
-  const handleGuestLogin = async () => {
-    setGuestLoading(true);
+  const handleAppLogin = async () => {
+    setAppLoading(true);
 
     try {
       const { error } = await supabase.auth.signInWithPassword({
@@ -61,7 +61,7 @@ export const AuthDialog = ({ open, onOpenChange }: AuthDialogProps) => {
       onOpenChange(false);
       toast({
         title: "Sukces",
-        description: "Zalogowano jako gość",
+        description: "Zalogowano do aplikacji",
       });
     } catch (error: any) {
       toast({
@@ -70,7 +70,7 @@ export const AuthDialog = ({ open, onOpenChange }: AuthDialogProps) => {
         variant: "destructive",
       });
     } finally {
-      setGuestLoading(false);
+      setAppLoading(false);
     }
   };
 
@@ -82,6 +82,25 @@ export const AuthDialog = ({ open, onOpenChange }: AuthDialogProps) => {
         </DialogHeader>
 
         <div className="space-y-6">
+          <Button 
+            onClick={handleAppLogin} 
+            className="w-full h-16 text-lg font-semibold" 
+            disabled={appLoading}
+          >
+            {appLoading ? "Ładowanie..." : "Kontynuuj do aplikacji"}
+          </Button>
+
+          <div className="relative">
+            <div className="absolute inset-0 flex items-center">
+              <span className="w-full border-t" />
+            </div>
+            <div className="relative flex justify-center text-xs uppercase">
+              <span className="bg-background px-2 text-muted-foreground">
+                Lub zaloguj się
+              </span>
+            </div>
+          </div>
+
           <form onSubmit={handleSignIn} className="space-y-4">
             <div>
               <Label htmlFor="signin-email">Email</Label>
@@ -103,30 +122,10 @@ export const AuthDialog = ({ open, onOpenChange }: AuthDialogProps) => {
                 required
               />
             </div>
-            <Button type="submit" className="w-full" disabled={loading}>
+            <Button type="submit" variant="outline" className="w-full" disabled={loading}>
               {loading ? "Logowanie..." : "Zaloguj się"}
             </Button>
           </form>
-
-          <div className="relative">
-            <div className="absolute inset-0 flex items-center">
-              <span className="w-full border-t" />
-            </div>
-            <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-background px-2 text-muted-foreground">
-                Lub
-              </span>
-            </div>
-          </div>
-
-          <Button 
-            onClick={handleGuestLogin} 
-            variant="outline" 
-            className="w-full" 
-            disabled={guestLoading}
-          >
-            {guestLoading ? "Logowanie..." : "Kontynuuj jako Gość"}
-          </Button>
         </div>
       </DialogContent>
     </Dialog>
