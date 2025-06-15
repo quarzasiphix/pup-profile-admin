@@ -1,5 +1,4 @@
 
-import { useState } from "react";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Check, Image } from "lucide-react";
@@ -10,12 +9,14 @@ interface ThumbnailSelectorProps {
     image_url: string;
     image_name: string | null;
     sort_order: number | null;
+    is_thumbnail: boolean;
   }>;
-  selectedThumbnail: string;
-  onThumbnailChange: (url: string) => void;
+  onThumbnailChange: (imageId: string) => void;
 }
 
-export const ThumbnailSelector = ({ images, selectedThumbnail, onThumbnailChange }: ThumbnailSelectorProps) => {
+export const ThumbnailSelector = ({ images, onThumbnailChange }: ThumbnailSelectorProps) => {
+  const selectedThumbnail = images.find(img => img.is_thumbnail);
+
   return (
     <div className="space-y-3">
       <Label>Wybierz zdjęcie główne</Label>
@@ -24,11 +25,11 @@ export const ThumbnailSelector = ({ images, selectedThumbnail, onThumbnailChange
           <div
             key={image.id}
             className={`relative cursor-pointer rounded-lg overflow-hidden border-2 transition-colors ${
-              selectedThumbnail === image.image_url
+              image.is_thumbnail
                 ? "border-blue-500 bg-blue-50"
                 : "border-gray-200 hover:border-gray-300"
             }`}
-            onClick={() => onThumbnailChange(image.image_url)}
+            onClick={() => onThumbnailChange(image.id)}
           >
             <div className="aspect-square">
               <img
@@ -37,7 +38,7 @@ export const ThumbnailSelector = ({ images, selectedThumbnail, onThumbnailChange
                 className="w-full h-full object-cover"
               />
             </div>
-            {selectedThumbnail === image.image_url && (
+            {image.is_thumbnail && (
               <div className="absolute inset-0 bg-blue-500/20 flex items-center justify-center">
                 <div className="bg-blue-500 text-white rounded-full p-1">
                   <Check className="h-4 w-4" />

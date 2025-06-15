@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/button";
 
 interface ImageGalleryProps {
   dogId: string;
-  thumbnailUrl?: string | null;
 }
 
 interface DogImage {
@@ -14,9 +13,10 @@ interface DogImage {
   image_url: string;
   image_name: string | null;
   sort_order: number | null;
+  is_thumbnail: boolean;
 }
 
-export const ImageGallery = ({ dogId, thumbnailUrl }: ImageGalleryProps) => {
+export const ImageGallery = ({ dogId }: ImageGalleryProps) => {
   const [images, setImages] = useState<DogImage[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -31,30 +31,18 @@ export const ImageGallery = ({ dogId, thumbnailUrl }: ImageGalleryProps) => {
         .from("dog_images")
         .select("*")
         .eq("dog_id", dogId)
+        .order("is_thumbnail", { ascending: false })
         .order("sort_order", { ascending: true });
 
       if (error) throw error;
-
-      const allImages = [];
       
-      // Add thumbnail as first image if it exists and is not already in the gallery
-      if (thumbnailUrl) {
-        const isThumbnailInGallery = data?.some(img => img.image_url === thumbnailUrl);
-        if (!isThumbnailInGallery) {
-          allImages.push({
-            id: 'thumbnail',
-            image_url: thumbnailUrl,
-            image_name: 'Zdjęcie główne',
-            sort_order: -1,
-          });
-        }
+      setImages(data || []);
+      
+      // Set current index to thumbnail if it exists, otherwise 0
+      const thumbnailIndex = data?.findIndex(img => img.is_thumbnail);
+      if (thumbnailIndex !== undefined && thumbnailIndex !== -1) {
+        setCurrentIndex(thumbnailIndex);
       }
-      
-      if (data) {
-        allImages.push(...data);
-      }
-      
-      setImages(allImages);
     } catch (error) {
       console.error("Error fetching images:", error);
     } finally {
@@ -97,6 +85,11 @@ export const ImageGallery = ({ dogId, thumbnailUrl }: ImageGalleryProps) => {
           alt={currentImage.image_name || "Zdjęcie psa"}
           className="w-full h-full object-cover"
         />
+        {currentImage.is_thumbnail && (
+          <div className="absolute top-2 left-2 bg-blue-500 text-white text-xs px-2 py-1 rounded">
+            Główne zdjęcie
+          </div>
+        )}
       </div>
       
       {images.length > 1 && (

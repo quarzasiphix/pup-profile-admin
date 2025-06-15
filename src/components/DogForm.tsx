@@ -27,7 +27,6 @@ interface DogFormProps {
 export const DogForm = ({ open, onOpenChange, dog, onSuccess }: DogFormProps) => {
   const [formData, setFormData] = useState({
     name: "",
-    type: "",
     breed: "",
     age: "",
     gender: "",
@@ -41,8 +40,8 @@ export const DogForm = ({ open, onOpenChange, dog, onSuccess }: DogFormProps) =>
     image_url: string;
     image_name: string | null;
     sort_order: number | null;
+    is_thumbnail: boolean;
   }>>([]);
-  const [selectedThumbnail, setSelectedThumbnail] = useState<string>("");
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
 
@@ -50,7 +49,6 @@ export const DogForm = ({ open, onOpenChange, dog, onSuccess }: DogFormProps) =>
     if (dog) {
       setFormData({
         name: dog.name || "",
-        type: dog.type || "",
         breed: dog.breed || "",
         age: dog.age || "",
         gender: dog.gender || "",
@@ -59,12 +57,10 @@ export const DogForm = ({ open, onOpenChange, dog, onSuccess }: DogFormProps) =>
         weight_kg: dog.weight_kg?.toString() || "",
         birthday: dog.birthday || "",
       });
-      setSelectedThumbnail(dog.thumbnail_url || "");
       fetchDogImages(dog.id);
     } else {
       setFormData({
         name: "",
-        type: "",
         breed: "",
         age: "",
         gender: "",
@@ -74,7 +70,6 @@ export const DogForm = ({ open, onOpenChange, dog, onSuccess }: DogFormProps) =>
         birthday: "",
       });
       setImages([]);
-      setSelectedThumbnail("");
     }
   }, [dog, open]);
 
@@ -104,7 +99,6 @@ export const DogForm = ({ open, onOpenChange, dog, onSuccess }: DogFormProps) =>
     try {
       const dogData = {
         name: formData.name,
-        type: formData.type as "puppy" | "adult_male" | "adult_female",
         breed: formData.breed as "yorkshire_terrier" | "pomeranian",
         age: formData.age as "puppy" | "adult",
         gender: formData.gender as "male" | "female",
@@ -112,7 +106,11 @@ export const DogForm = ({ open, onOpenChange, dog, onSuccess }: DogFormProps) =>
         long_description: formData.long_description || null,
         weight_kg: formData.weight_kg ? parseFloat(formData.weight_kg) : null,
         birthday: formData.birthday || null,
-        thumbnail_url: selectedThumbnail || null,
+        // Remove thumbnail_url as we now use is_thumbnail in dog_images
+        thumbnail_url: null,
+        // Set type based on age and gender for backward compatibility
+        type: formData.age === "puppy" ? "puppy" as const : 
+              formData.gender === "male" ? "adult_male" as const : "adult_female" as const,
       };
 
       let dogId: string;
@@ -143,6 +141,7 @@ export const DogForm = ({ open, onOpenChange, dog, onSuccess }: DogFormProps) =>
             image_name: img.image_name,
             original_name: img.image_name,
             sort_order: index,
+            is_thumbnail: img.is_thumbnail || false,
           }));
 
           const { error: imageError } = await supabase
@@ -274,35 +273,6 @@ export const DogForm = ({ open, onOpenChange, dog, onSuccess }: DogFormProps) =>
             </div>
 
             <div>
-              <Label className="text-lg font-semibold mb-4 block">Typ (stary system) ⚙️</Label>
-              <ToggleGroup 
-                type="single" 
-                value={formData.type} 
-                onValueChange={(value) => value && handleInputChange("type", value)}
-                className="grid grid-cols-1 gap-2"
-              >
-                <ToggleGroupItem 
-                  value="puppy" 
-                  className="h-12 text-sm data-[state=on]:bg-gray-100 data-[state=on]:text-gray-800"
-                >
-                  Szczenię (legacy)
-                </ToggleGroupItem>
-                <ToggleGroupItem 
-                  value="adult_male"
-                  className="h-12 text-sm data-[state=on]:bg-gray-100 data-[state=on]:text-gray-800"
-                >
-                  Dorosły Samiec (legacy)
-                </ToggleGroupItem>
-                <ToggleGroupItem 
-                  value="adult_female"
-                  className="h-12 text-sm data-[state=on]:bg-gray-100 data-[state=on]:text-gray-800"
-                >
-                  Dorosła Samica (legacy)
-                </ToggleGroupItem>
-              </ToggleGroup>
-            </div>
-
-            <div>
               <Label htmlFor="weight" className="text-lg font-semibold flex items-center gap-2">
                 <Weight className="h-5 w-5" />
                 Waga (kg)
@@ -369,8 +339,12 @@ export const DogForm = ({ open, onOpenChange, dog, onSuccess }: DogFormProps) =>
           {images.length > 0 && (
             <ThumbnailSelector
               images={images}
-              selectedThumbnail={selectedThumbnail}
-              onThumbnailChange={setSelectedThumbnail}
+              onThumbnailChange={(imageId) => {
+                setImages(prev => prev.map(img => ({
+                  ...img,
+                  is_thumbnail: img.id === imageId
+                })));
+              }}
             />
           )}
 

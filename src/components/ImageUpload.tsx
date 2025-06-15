@@ -12,12 +12,14 @@ interface ImageUploadProps {
     image_url: string;
     image_name: string | null;
     sort_order: number | null;
+    is_thumbnail: boolean;
   }>;
   onImagesChange: (images: Array<{
     id: string;
     image_url: string;
     image_name: string | null;
     sort_order: number | null;
+    is_thumbnail: boolean;
   }>) => void;
   maxImages?: number;
 }
@@ -83,7 +85,7 @@ export const ImageUpload = ({
 
   const uploadImage = async (file: File): Promise<string> => {
     const optimizedFile = await optimizeImage(file);
-    const fileExt = 'jpg'; // Always save as JPG after optimization
+    const fileExt = 'jpg';
     const fileName = `${Math.random()}.${fileExt}`;
     const filePath = `dog-images/${fileName}`;
 
@@ -132,6 +134,7 @@ export const ImageUpload = ({
               image_name: file.name,
               original_name: file.name,
               file_size: file.size,
+              is_thumbnail: images.length === 0 && newImages.length === 0, // First image becomes thumbnail
             })
             .select()
             .single();
@@ -147,6 +150,7 @@ export const ImageUpload = ({
             image_url: imageUrl,
             image_name: file.name,
             sort_order: images.length + newImages.length,
+            is_thumbnail: images.length === 0 && newImages.length === 0, // First image becomes thumbnail
           });
         }
       }
@@ -242,6 +246,11 @@ export const ImageUpload = ({
                 alt={image.image_name || "Zdjęcie psa"}
                 className="w-full h-full object-cover"
               />
+              {image.is_thumbnail && (
+                <div className="absolute top-1 left-1 bg-blue-500 text-white text-xs px-2 py-1 rounded">
+                  Główne
+                </div>
+              )}
             </div>
             <Button
               type="button"

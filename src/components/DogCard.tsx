@@ -103,7 +103,7 @@ export const DogCard = ({ dog, onEdit, onDelete }: DogCardProps) => {
       </CardHeader>
       
       <CardContent className="space-y-3">
-        <ImageGallery dogId={dog.id} thumbnailUrl={dog.thumbnail_url} />
+        <ImageGallery dogId={dog.id} />
         
         {dog.short_description && (
           <p className="text-gray-600 text-sm line-clamp-2 text-center md:text-left">
