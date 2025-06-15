@@ -55,8 +55,11 @@ export type Database = {
       }
       dogs: {
         Row: {
+          age: Database["public"]["Enums"]["dog_age"]
           birthday: string | null
+          breed: Database["public"]["Enums"]["dog_breed"]
           created_at: string
+          gender: Database["public"]["Enums"]["dog_gender"]
           id: string
           is_active: boolean
           long_description: string | null
@@ -68,8 +71,11 @@ export type Database = {
           weight_kg: number | null
         }
         Insert: {
+          age: Database["public"]["Enums"]["dog_age"]
           birthday?: string | null
+          breed: Database["public"]["Enums"]["dog_breed"]
           created_at?: string
+          gender: Database["public"]["Enums"]["dog_gender"]
           id?: string
           is_active?: boolean
           long_description?: string | null
@@ -81,8 +87,11 @@ export type Database = {
           weight_kg?: number | null
         }
         Update: {
+          age?: Database["public"]["Enums"]["dog_age"]
           birthday?: string | null
+          breed?: Database["public"]["Enums"]["dog_breed"]
           created_at?: string
+          gender?: Database["public"]["Enums"]["dog_gender"]
           id?: string
           is_active?: boolean
           long_description?: string | null
@@ -103,6 +112,9 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
+      dog_age: "puppy" | "adult"
+      dog_breed: "yorkshire_terrier" | "pomeranian"
+      dog_gender: "male" | "female"
       dog_type: "puppy" | "adult_male" | "adult_female"
     }
     CompositeTypes: {
@@ -219,6 +231,9 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      dog_age: ["puppy", "adult"],
+      dog_breed: ["yorkshire_terrier", "pomeranian"],
+      dog_gender: ["male", "female"],
       dog_type: ["puppy", "adult_male", "adult_female"],
     },
   },

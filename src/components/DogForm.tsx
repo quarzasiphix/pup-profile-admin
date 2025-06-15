@@ -25,6 +25,9 @@ export const DogForm = ({ open, onOpenChange, dog, onSuccess }: DogFormProps) =>
   const [formData, setFormData] = useState({
     name: "",
     type: "",
+    breed: "",
+    age: "",
+    gender: "",
     short_description: "",
     long_description: "",
     weight_kg: "",
@@ -45,6 +48,9 @@ export const DogForm = ({ open, onOpenChange, dog, onSuccess }: DogFormProps) =>
       setFormData({
         name: dog.name || "",
         type: dog.type || "",
+        breed: dog.breed || "",
+        age: dog.age || "",
+        gender: dog.gender || "",
         short_description: dog.short_description || "",
         long_description: dog.long_description || "",
         weight_kg: dog.weight_kg?.toString() || "",
@@ -56,6 +62,9 @@ export const DogForm = ({ open, onOpenChange, dog, onSuccess }: DogFormProps) =>
       setFormData({
         name: "",
         type: "",
+        breed: "",
+        age: "",
+        gender: "",
         short_description: "",
         long_description: "",
         weight_kg: "",
@@ -93,6 +102,9 @@ export const DogForm = ({ open, onOpenChange, dog, onSuccess }: DogFormProps) =>
       const dogData = {
         name: formData.name,
         type: formData.type as "puppy" | "adult_male" | "adult_female",
+        breed: formData.breed as "yorkshire_terrier" | "pomeranian",
+        age: formData.age as "puppy" | "adult",
+        gender: formData.gender as "male" | "female",
         short_description: formData.short_description || null,
         long_description: formData.long_description || null,
         weight_kg: formData.weight_kg ? parseFloat(formData.weight_kg) : null,
@@ -174,7 +186,46 @@ export const DogForm = ({ open, onOpenChange, dog, onSuccess }: DogFormProps) =>
             </div>
 
             <div>
-              <Label htmlFor="type">Typ *</Label>
+              <Label htmlFor="breed">Rasa *</Label>
+              <Select value={formData.breed} onValueChange={(value) => handleInputChange("breed", value)}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Wybierz rasę" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="yorkshire_terrier">Yorkshire Terrier</SelectItem>
+                  <SelectItem value="pomeranian">Pomeranian</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div>
+              <Label htmlFor="age">Wiek *</Label>
+              <Select value={formData.age} onValueChange={(value) => handleInputChange("age", value)}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Wybierz wiek" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="puppy">Szczenię</SelectItem>
+                  <SelectItem value="adult">Dorosły</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div>
+              <Label htmlFor="gender">Płeć *</Label>
+              <Select value={formData.gender} onValueChange={(value) => handleInputChange("gender", value)}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Wybierz płeć" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="male">Samiec</SelectItem>
+                  <SelectItem value="female">Samica</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div>
+              <Label htmlFor="type">Typ (legacy) *</Label>
               <Select value={formData.type} onValueChange={(value) => handleInputChange("type", value)}>
                 <SelectTrigger>
                   <SelectValue placeholder="Wybierz typ psa" />
@@ -198,7 +249,7 @@ export const DogForm = ({ open, onOpenChange, dog, onSuccess }: DogFormProps) =>
               />
             </div>
 
-            <div>
+            <div className="md:col-span-2">
               <Label htmlFor="birthday">Data urodzenia</Label>
               <Input
                 id="birthday"

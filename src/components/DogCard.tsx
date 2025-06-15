@@ -15,16 +15,36 @@ interface DogCardProps {
 }
 
 export const DogCard = ({ dog, onEdit, onDelete }: DogCardProps) => {
-  const formatDogType = (type: string) => {
-    switch (type) {
+  const formatBreed = (breed: string) => {
+    switch (breed) {
+      case "yorkshire_terrier":
+        return "Yorkshire Terrier";
+      case "pomeranian":
+        return "Pomeranian";
+      default:
+        return breed;
+    }
+  };
+
+  const formatAge = (age: string) => {
+    switch (age) {
       case "puppy":
         return "Szczenię";
-      case "adult_male":
-        return "Dorosły Samiec";
-      case "adult_female":
-        return "Dorosła Samica";
+      case "adult":
+        return "Dorosły";
       default:
-        return type;
+        return age;
+    }
+  };
+
+  const formatGender = (gender: string) => {
+    switch (gender) {
+      case "male":
+        return "Samiec";
+      case "female":
+        return "Samica";
+      default:
+        return gender;
     }
   };
 
@@ -33,13 +53,22 @@ export const DogCard = ({ dog, onEdit, onDelete }: DogCardProps) => {
     return new Date(date).toLocaleDateString("pl-PL");
   };
 
-  const getTypeColor = (type: string) => {
-    switch (type) {
+  const getAgeColor = (age: string) => {
+    switch (age) {
       case "puppy":
         return "bg-blue-100 text-blue-800";
-      case "adult_male":
+      case "adult":
         return "bg-green-100 text-green-800";
-      case "adult_female":
+      default:
+        return "bg-gray-100 text-gray-800";
+    }
+  };
+
+  const getGenderColor = (gender: string) => {
+    switch (gender) {
+      case "male":
+        return "bg-indigo-100 text-indigo-800";
+      case "female":
         return "bg-pink-100 text-pink-800";
       default:
         return "bg-gray-100 text-gray-800";
@@ -49,13 +78,27 @@ export const DogCard = ({ dog, onEdit, onDelete }: DogCardProps) => {
   return (
     <Card className="hover:shadow-lg transition-shadow">
       <CardHeader className="pb-3">
-        <div className="flex flex-col space-y-2 md:flex-row md:justify-between md:items-start md:space-y-0">
+        <div className="flex flex-col space-y-2">
           <CardTitle className="text-lg md:text-xl text-center md:text-left">
             {dog.name}
           </CardTitle>
-          <Badge className={`${getTypeColor(dog.type)} text-xs self-center md:self-start`}>
-            {formatDogType(dog.type)}
-          </Badge>
+          <div className="flex flex-wrap gap-2 justify-center md:justify-start">
+            {dog.breed && (
+              <Badge className="bg-purple-100 text-purple-800 text-xs">
+                {formatBreed(dog.breed)}
+              </Badge>
+            )}
+            {dog.age && (
+              <Badge className={`${getAgeColor(dog.age)} text-xs`}>
+                {formatAge(dog.age)}
+              </Badge>
+            )}
+            {dog.gender && (
+              <Badge className={`${getGenderColor(dog.gender)} text-xs`}>
+                {formatGender(dog.gender)}
+              </Badge>
+            )}
+          </div>
         </div>
       </CardHeader>
       
